@@ -1,0 +1,38 @@
+@import "../../node_modules/stijnhooft-portal-front-end-library/style/app";
+
+
+.notificationList {
+  flex-grow: 2;
+  background: $background-colour;
+  padding: 20px 100px;
+
+  .noNotifications {
+    display: block;
+    margin: 0 auto;
+
+    img {
+      max-width: 100%;
+      max-height: 500px;
+      display: block;
+      margin: 0 auto;
+    }
+    p {
+      font-size: 30pt;
+      text-align: center;
+      font-family: $cursive-font;
+    }
+  }
+}
+
+@media all and (max-width: 640px){
+  .notificationList {
+    padding: 20px 20px;
+    .noNotifications {
+      p {
+        font-size: 16pt;
+        text-align: center;
+      }
+    }
+  }
+}
+

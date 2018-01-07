@@ -1,0 +1,16 @@
+<div>
+  <div class="notificationList">
+
+    <div *ngIf="notifications && notifications.length == 0"
+         class="noNotifications">
+      <img src="assets/imgs/no_notifications.png" />
+      <p>Relax! Nothing else to do.</p>
+    </div>
+
+    <app-notification
+      *ngFor="let notification of notifications"
+      [notification]="notification">
+    </app-notification>
+
+  </div>
+</div>
