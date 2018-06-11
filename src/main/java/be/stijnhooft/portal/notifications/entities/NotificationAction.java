@@ -1,8 +1,6 @@
-package be.stijnhooft.portal.notifications.model;
+package be.stijnhooft.portal.notifications.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -10,6 +8,7 @@ import javax.persistence.Embeddable;
 @ToString @EqualsAndHashCode
 @Getter
 @Embeddable
+@AllArgsConstructor @NoArgsConstructor
 public class NotificationAction {
 
   /** url that needs to be opened when the user taps the notification **/

@@ -1,7 +1,9 @@
 # portal-notifications
-A module for my personal portal, which receives notifications from other modules via JMS, and turns them into emails, push notifications, ... 
+A module for my personal portal, which **listens to events from other modules, and turns them into notifications**.
 
-With the front-end, it's possible to manage these notifications.
+These notifications can be delivered to the user by so called *notification-plugins*. 
+
+With the front-end, it's possible to *subscribe to events*, and to *define how to transform these into notifications*.
 
 
 ## Development server

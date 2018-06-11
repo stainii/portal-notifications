@@ -2,7 +2,7 @@
   <notification
     id="1"
     origin="Housagotchi"
-    date="2017-10-20 10:02:10"
+    date="2018-04-23 10:02:10"
     title="Title 1"
     message="Message 1"
     action_url="http://www.stijnhooft.be"
@@ -13,13 +13,13 @@
   <notification
     id="2"
     origin="Housagotchi"
-    date="2017-10-22 10:02:10"
+    date="2018-04-23 10:05:10"
     title="Title 2"
     message="Message 2"
     action_url="http://www.stijnhooft.be"
     action_text="Open Housagotchi"
-    read="true"
-    urgency="PUBLISH_IMMEDIATELY"
+    read="false"
+    urgency="PUBLISH_WITHIN_24_HOURS"
   />
   <notification
     id="3"

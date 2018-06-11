@@ -1,6 +1,6 @@
 package be.stijnhooft.portal.notifications.controllers;
 
-import be.stijnhooft.portal.notifications.model.Notification;
+import be.stijnhooft.portal.notifications.entities.Notification;
 import be.stijnhooft.portal.notifications.services.NotificationService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

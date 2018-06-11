@@ -1,0 +1,22 @@
+<dataset>
+  <subscription
+    id="1"
+    origin="test"
+    activation_condition="true"
+    mapping_of_title="Title 1"
+    mapping_of_message="Message 1"
+    mapping_of_action_url="http://www.stijnhooft.be"
+    mapping_of_action_text="Open Housagotchi"
+    urgency="PUBLISH_IMMEDIATELY"
+  />
+  <subscription
+    id="2"
+    origin="Housagotchi"
+    activation_condition="true"
+    mapping_of_title="Title 1"
+    mapping_of_message="Message 1"
+    mapping_of_action_url="http://www.stijnhooft.be"
+    mapping_of_action_text="Open Housagotchi"
+    urgency="PUBLISH_IMMEDIATELY"
+  />
+</dataset>

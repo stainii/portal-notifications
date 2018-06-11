@@ -1,9 +1,7 @@
-package be.stijnhooft.portal.notifications.model;
+package be.stijnhooft.portal.notifications.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.ToString;
+import be.stijnhooft.portal.notifications.model.NotificationUrgency;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @SequenceGenerator( name = "notificationIdGenerator",
   sequenceName = "notification_id_sequence")
+@AllArgsConstructor @NoArgsConstructor
 public class Notification {
 
   @Id
@@ -34,7 +33,12 @@ public class Notification {
   private String message;
 
   @Embedded
+  @NonNull
   private NotificationAction action;
+
+  @Enumerated(EnumType.STRING)
+  @NonNull
+  private NotificationUrgency urgency;
 
   private boolean read;
 

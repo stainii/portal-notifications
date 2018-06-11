@@ -1,7 +1,8 @@
 package be.stijnhooft.portal.notifications.repositories;
 
 import be.stijnhooft.portal.notifications.PortalNotifications;
-import be.stijnhooft.portal.notifications.model.Notification;
+import be.stijnhooft.portal.notifications.entities.Notification;
+import be.stijnhooft.portal.notifications.model.NotificationUrgency;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -16,6 +17,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -48,6 +50,24 @@ public class NotificationRepositoryTest {
   @DatabaseTearDown("/datasets/clear.xml")
   public void findByReadWhenTrue() {
     List<Notification> unreadNotifications = notificationRepository.findByRead(true);
+    assertEquals(1, unreadNotifications.size());
+    assertEquals(Long.valueOf(2), unreadNotifications.get(0).getId());
+  }
+
+  @Test
+  @DatabaseSetup("/datasets/NotificationRepositoryTest-findByUrgency-initial.xml")
+  @DatabaseTearDown("/datasets/clear.xml")
+  public void findByUrgencyAndDateGreaterThanEqualWhenPublishImmediately() {
+    List<Notification> unreadNotifications = notificationRepository.findByUrgencyAndDateGreaterThanEqual(NotificationUrgency.PUBLISH_IMMEDIATELY, LocalDateTime.of(2018, 4, 22, 18, 0));
+    assertEquals(1, unreadNotifications.size());
+    assertEquals(Long.valueOf(1), unreadNotifications.get(0).getId());
+  }
+
+  @Test
+  @DatabaseSetup("/datasets/NotificationRepositoryTest-findByUrgency-initial.xml")
+  @DatabaseTearDown("/datasets/clear.xml")
+  public void findByUrgencyWhenPublishAndDateGreaterThanEqualWithin24Hours() {
+    List<Notification> unreadNotifications = notificationRepository.findByUrgencyAndDateGreaterThanEqual(NotificationUrgency.PUBLISH_WITHIN_24_HOURS, LocalDateTime.of(2018, 4, 22, 18, 0));
     assertEquals(1, unreadNotifications.size());
     assertEquals(Long.valueOf(2), unreadNotifications.get(0).getId());
   }
