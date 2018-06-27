@@ -40,7 +40,11 @@ public class EventService {
       .map(notificationMapper::map)
       .collect(Collectors.toList());
 
-    notificationService.saveAndIfUrgentThenPublish(notifications);
+    if (notifications.isEmpty()) {
+        log.info("Received events, but no subscriptions exist for these events. Doing nothing.");
+    } else {
+        notificationService.saveAndIfUrgentThenPublish(notifications);
+    }
   }
 
 }

@@ -15,36 +15,35 @@ import java.util.stream.Collectors;
 @Transactional
 public class NotificationService {
 
-  private final NotificationRepository notificationRepository;
-  private final PublishService publishService;
+    private final NotificationRepository notificationRepository;
+    private final PublishService publishService;
 
-  @Inject
-  public NotificationService(NotificationRepository notificationRepository, PublishService publishService) {
-    this.notificationRepository = notificationRepository;
-    this.publishService = publishService;
-  }
+    @Inject
+    public NotificationService(NotificationRepository notificationRepository, PublishService publishService) {
+        this.notificationRepository = notificationRepository;
+        this.publishService = publishService;
+    }
 
-  public List<Notification> findByRead(boolean read) {
-    return notificationRepository.findByRead(read);
-  }
+    public List<Notification> findByRead(boolean read) {
+        return notificationRepository.findByRead(read);
+    }
 
-  public List<Notification> findAll() {
-    return notificationRepository.findAll();
-  }
+    public List<Notification> findAll() {
+        return notificationRepository.findAll();
+    }
 
-  //TODO: test
-  public Collection<Notification> saveAndIfUrgentThenPublish(Collection<Notification> notifications) {
-    notificationRepository.save(notifications);
-    publishUrgentNotifications(notifications);
-    //the other, non-urgent notifications, will be published by a scheduled method
+    public Collection<Notification> saveAndIfUrgentThenPublish(Collection<Notification> notifications) {
+        notificationRepository.save(notifications);
+        publishUrgentNotifications(notifications);
+        //the other, non-urgent notifications, will be published by a scheduled method
 
-    return notifications;
-  }
+        return notifications;
+    }
 
-  private void publishUrgentNotifications(Collection<Notification> notifications) {
-    List<Notification> urgentNotifications = notifications.stream()
-      .filter(notification -> notification.getUrgency() == NotificationUrgency.PUBLISH_IMMEDIATELY)
-      .collect(Collectors.toList());
-    publishService.publishNotifications(urgentNotifications);
-  }
+    private void publishUrgentNotifications(Collection<Notification> notifications) {
+        List<Notification> urgentNotifications = notifications.stream()
+            .filter(notification -> notification.getUrgency() == NotificationUrgency.PUBLISH_IMMEDIATELY)
+            .collect(Collectors.toList());
+        publishService.publishNotifications(urgentNotifications);
+    }
 }
