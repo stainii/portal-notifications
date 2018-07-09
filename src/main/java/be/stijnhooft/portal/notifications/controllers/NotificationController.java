@@ -2,11 +2,11 @@ package be.stijnhooft.portal.notifications.controllers;
 
 import be.stijnhooft.portal.notifications.entities.Notification;
 import be.stijnhooft.portal.notifications.services.NotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
 import java.util.List;
 
 @RestController
@@ -15,7 +15,7 @@ public class NotificationController {
 
   private final NotificationService notificationService;
 
-  @Inject
+  @Autowired
   public NotificationController(NotificationService notificationService) {
     this.notificationService = notificationService;
   }

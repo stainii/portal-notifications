@@ -1,12 +1,13 @@
 package be.stijnhooft.portal.notifications.services;
 
 import be.stijnhooft.portal.notifications.entities.Notification;
+import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
 import be.stijnhooft.portal.notifications.model.NotificationUrgency;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,12 +17,12 @@ import java.util.stream.Collectors;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final PublishService publishService;
+    private final NotificationPublisher notificationPublisher;
 
-    @Inject
-    public NotificationService(NotificationRepository notificationRepository, PublishService publishService) {
+    @Autowired
+    public NotificationService(NotificationRepository notificationRepository, NotificationPublisher notificationPublisher) {
         this.notificationRepository = notificationRepository;
-        this.publishService = publishService;
+        this.notificationPublisher = notificationPublisher;
     }
 
     public List<Notification> findByRead(boolean read) {
@@ -33,7 +34,7 @@ public class NotificationService {
     }
 
     public Collection<Notification> saveAndIfUrgentThenPublish(Collection<Notification> notifications) {
-        notificationRepository.save(notifications);
+        notifications.forEach(notificationRepository::save);
         publishUrgentNotifications(notifications);
         //the other, non-urgent notifications, will be published by a scheduled method
 
@@ -44,6 +45,6 @@ public class NotificationService {
         List<Notification> urgentNotifications = notifications.stream()
             .filter(notification -> notification.getUrgency() == NotificationUrgency.PUBLISH_IMMEDIATELY)
             .collect(Collectors.toList());
-        publishService.publishNotifications(urgentNotifications);
+        notificationPublisher.publish(urgentNotifications);
     }
 }

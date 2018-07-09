@@ -5,12 +5,12 @@ import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.Subscription;
 import be.stijnhooft.portal.notifications.repositories.SubscriptionRepository;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -20,7 +20,7 @@ public class SubscriptionService {
     private final ExpressionParser parser = new SpelExpressionParser();
     private final SubscriptionRepository subscriptionRepository;
 
-    @Inject
+    @Autowired
     public SubscriptionService(SubscriptionRepository subscriptionRepository) {
         this.subscriptionRepository = subscriptionRepository;
     }

@@ -3,12 +3,11 @@ package be.stijnhooft.portal.notifications.services;
 import be.stijnhooft.portal.model.domain.Event;
 import be.stijnhooft.portal.notifications.entities.Notification;
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
-import be.stijnhooft.portal.notifications.routes.EventRoute;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,16 +21,14 @@ public class EventService {
   private final NotificationMapper notificationMapper;
   private final NotificationService notificationService;
 
-  @Inject
+  @Autowired
   public EventService(SubscriptionService subscriptionService, NotificationMapper notificationMapper, NotificationService notificationService) {
     this.subscriptionService = subscriptionService;
     this.notificationMapper = notificationMapper;
     this.notificationService = notificationService;
   }
 
-  /**
-   * Invoked by {@link EventRoute#configure()}
-   */
+  //TODO: invoke by listener
   public void receiveEvents(Collection<Event> events) {
     log.info("Received events: " + events);
 

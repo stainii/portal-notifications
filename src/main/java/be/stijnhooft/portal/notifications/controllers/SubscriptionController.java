@@ -2,9 +2,9 @@ package be.stijnhooft.portal.notifications.controllers;
 
 import be.stijnhooft.portal.notifications.entities.Subscription;
 import be.stijnhooft.portal.notifications.services.SubscriptionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
 import java.util.List;
 
 @RestController
@@ -13,7 +13,7 @@ public class SubscriptionController {
 
   private final SubscriptionService subscriptionService;
 
-  @Inject
+  @Autowired
   public SubscriptionController(SubscriptionService subscriptionService) {
     this.subscriptionService = subscriptionService;
   }
