@@ -49,13 +49,6 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-            <!--<dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring-boot-dependencies</artifactId>
-                <version>2.20.2</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -80,13 +73,6 @@
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
-        <!--<dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
--->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
@@ -175,28 +161,6 @@
             <version>2.5.4</version>
             <scope>test</scope>
         </dependency>
-
-<!--
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-pool</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-camel</artifactId>
-        </dependency>-->
 
         <dependency>
             <groupId>org.liquibase</groupId>
