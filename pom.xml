@@ -29,8 +29,9 @@
         <environment>dev</environment>
         <database-host>localhost</database-host>
         <database-port>5434</database-port>
-        <activemq-host>localhost</activemq-host>
-        <activemq-port>61616</activemq-port>
+        <rabbitmq-host>localhost</rabbitmq-host>
+        <rabbitmq-port>5672</rabbitmq-port>
+        <eureka.server.uri>http://localhost:8761</eureka.server.uri>
 
         <!-- versions of dependencies -->
         <java.version>1.8</java.version>
@@ -234,8 +235,9 @@
                 <environment>production</environment>
                 <database-host>portal-notifications-db</database-host>
                 <database-port>5432</database-port>
-                <activemq-host>portal-activemq</activemq-host>
-                <activemq-port>61616</activemq-port>
+                <rabbitmq-host>portal-rabbitmq</rabbitmq-host>
+                <rabbitmq-port>5672</rabbitmq-port>
+                <eureka.server.uri>http://portal-eureka:8761</eureka.server.uri>
             </properties>
             <build>
                 <plugins>
