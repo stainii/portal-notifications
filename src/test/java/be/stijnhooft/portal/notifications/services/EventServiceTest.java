@@ -1,15 +1,12 @@
-package be.stijnhooft.portal.notifications.plugins.email.services;
+package be.stijnhooft.portal.notifications.services;
 
 import be.stijnhooft.portal.model.domain.Event;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
-import be.stijnhooft.portal.notifications.entities.Notification;
-import be.stijnhooft.portal.notifications.entities.NotificationAction;
-import be.stijnhooft.portal.notifications.entities.Subscription;
+import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
+import be.stijnhooft.portal.notifications.entities.NotificationEntity;
+import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import be.stijnhooft.portal.notifications.model.NotificationUrgency;
-import be.stijnhooft.portal.notifications.services.EventService;
-import be.stijnhooft.portal.notifications.services.NotificationService;
-import be.stijnhooft.portal.notifications.services.SubscriptionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -46,11 +43,11 @@ public class EventServiceTest {
     Event event2 = new Event("source2", LocalDateTime.now(), new HashMap<>());
     Event event3 = new Event("source3", LocalDateTime.now(), new HashMap<>());
 
-    FiringSubscription firingSubscription1 = new FiringSubscription(new Subscription(), event1);
-    FiringSubscription firingSubscription2 = new FiringSubscription(new Subscription(), event3);
+    FiringSubscription firingSubscription1 = new FiringSubscription(new SubscriptionEntity(), event1);
+    FiringSubscription firingSubscription2 = new FiringSubscription(new SubscriptionEntity(), event3);
 
-    Notification notification1 = new Notification(null, "source1", LocalDateTime.now(), "1", "1", new NotificationAction("1", "1"), NotificationUrgency.PUBLISH_WITHIN_24_HOURS, false);
-    Notification notification2 = new Notification(null, "source3", LocalDateTime.now(), "3", "3", new NotificationAction("3", "3"), NotificationUrgency.PUBLISH_IMMEDIATELY, false);
+    NotificationEntity notification1 = new NotificationEntity(null, "source1", LocalDateTime.now(), "1", "1", new NotificationActionEmbeddable("1", "1"), NotificationUrgency.PUBLISH_WITHIN_24_HOURS, false);
+    NotificationEntity notification2 = new NotificationEntity(null, "source3", LocalDateTime.now(), "3", "3", new NotificationActionEmbeddable("3", "3"), NotificationUrgency.PUBLISH_IMMEDIATELY, false);
 
     //mock
     doReturn(Stream.of(firingSubscription1)).when(subscriptionService).fireForEvent(event1);

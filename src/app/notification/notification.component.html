@@ -5,6 +5,6 @@
   <div class="card-body">
     <h4 class="card-title">{{notification.title}}</h4>
     <p class="card-text">{{notification.message}}</p>
-    <a href="#" class="btn btn-primary">{{notification.action.text}}</a>
+    <a [href]="notification.action.url" class="btn btn-primary">{{notification.action.text}}</a>
   </div>
 </div>

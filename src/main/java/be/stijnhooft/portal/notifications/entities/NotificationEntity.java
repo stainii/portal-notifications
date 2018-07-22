@@ -6,13 +6,13 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity @Table(name = "notification")
 @ToString @EqualsAndHashCode
 @Getter
 @SequenceGenerator( name = "notificationIdGenerator",
   sequenceName = "notification_id_sequence")
 @AllArgsConstructor @NoArgsConstructor
-public class Notification {
+public class NotificationEntity {
 
   @Id
   @GeneratedValue(generator = "notificationIdGenerator")
@@ -34,12 +34,13 @@ public class Notification {
 
   @Embedded
   @NonNull
-  private NotificationAction action;
+  private NotificationActionEmbeddable action;
 
   @Enumerated(EnumType.STRING)
   @NonNull
   private NotificationUrgency urgency;
 
+  @Setter
   private boolean read;
 
 }

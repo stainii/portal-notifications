@@ -8,7 +8,7 @@ export class NotificationService {
   constructor(private _http: HttpClient) { }
 
   findActiveNotifications() {
-    return this._http.get<Notification[]>("/api/notification/?read=false");
+    return this._http.get<Notification[]>("/api/notification/?onlyUnread=true");
   }
 
 }

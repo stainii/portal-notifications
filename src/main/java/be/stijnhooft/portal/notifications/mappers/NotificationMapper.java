@@ -2,11 +2,14 @@ package be.stijnhooft.portal.notifications.mappers;
 
 import be.stijnhooft.portal.model.domain.Event;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
-import be.stijnhooft.portal.notifications.entities.Notification;
-import be.stijnhooft.portal.notifications.entities.NotificationAction;
-import be.stijnhooft.portal.notifications.entities.SubscriptionMappingToNotification;
+import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
+import be.stijnhooft.portal.notifications.entities.NotificationEntity;
+import be.stijnhooft.portal.notifications.entities.SubscriptionMappingToNotificationEmbeddable;
+import be.stijnhooft.portal.notifications.model.Notification;
+import be.stijnhooft.portal.notifications.model.NotificationAction;
 import be.stijnhooft.portal.notifications.model.NotificationUrgency;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -21,9 +24,12 @@ public class NotificationMapper {
 
     private final ExpressionParser parser = new SpelExpressionParser();
 
-    public Notification map(@NonNull FiringSubscription firingSubscription) {
+    @Value("${url}") // fetched from the config server
+    private String baseUrlOfThisDeployment;
+
+    public NotificationEntity map(@NonNull FiringSubscription firingSubscription) {
         Event event = firingSubscription.getEvent();
-        SubscriptionMappingToNotification mapping = firingSubscription.getSubscription().getMappingToNotification();
+        SubscriptionMappingToNotificationEmbeddable mapping = firingSubscription.getSubscription().getMappingToNotification();
 
         StandardEvaluationContext context = new StandardEvaluationContext(event);
         String title = parser.parseExpression(mapping.ofTitle())
@@ -36,19 +42,19 @@ public class NotificationMapper {
             .getValue(context, String.class);
         NotificationUrgency urgency = firingSubscription.getSubscription().getUrgency();
 
-        NotificationAction action = new NotificationAction(actionUrl, actionName);
-        return new Notification(null, event.getSource(), event.getPublishDate(), title, message, action, urgency, false);
+        NotificationActionEmbeddable action = new NotificationActionEmbeddable(actionUrl, actionName);
+        return new NotificationEntity(null, event.getSource(), event.getPublishDate(), title, message, action, urgency, false);
     }
 
-    public be.stijnhooft.portal.notifications.model.Notification mapEntityToModel(@NonNull Notification entity) {
-        be.stijnhooft.portal.notifications.model.NotificationAction action =
-            new be.stijnhooft.portal.notifications.model.NotificationAction(entity.getAction().getUrl(), entity.getAction().getText());
+    public be.stijnhooft.portal.notifications.model.Notification mapEntityToModel(@NonNull NotificationEntity entity) {
+        NotificationAction action =
+            new NotificationAction(baseUrlOfThisDeployment + "api/notification/" + entity.getId() + "/action/url/", entity.getAction().getText(), entity.getAction().getInternalUrl());
 
-        return new be.stijnhooft.portal.notifications.model.Notification(entity.getId(), entity.getOrigin(),
-            entity.getDate(), entity.getTitle(), entity.getMessage(), entity.getUrgency(), action);
+        return new Notification(entity.getId(), entity.getOrigin(),
+            entity.getDate(), entity.getTitle(), entity.getMessage(), action, entity.getUrgency());
     }
 
-    public List<be.stijnhooft.portal.notifications.model.Notification> mapEntitiesToModel(@NonNull Collection<Notification> entities) {
+    public List<Notification> mapEntitiesToModel(@NonNull Collection<NotificationEntity> entities) {
         return entities.stream().map(this::mapEntityToModel).collect(Collectors.toList());
     }
 

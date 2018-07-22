@@ -1,6 +1,6 @@
 package be.stijnhooft.portal.notifications.messaging;
 
-import be.stijnhooft.portal.notifications.entities.Notification;
+import be.stijnhooft.portal.notifications.model.Notification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;

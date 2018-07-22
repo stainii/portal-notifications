@@ -1,7 +1,7 @@
 package be.stijnhooft.portal.notifications.services;
 
 import be.stijnhooft.portal.model.domain.Event;
-import be.stijnhooft.portal.notifications.entities.Notification;
+import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +28,10 @@ public class EventService {
     this.notificationService = notificationService;
   }
 
-  //TODO: invoke by listener
   public void receiveEvents(Collection<Event> events) {
     log.info("Received events: " + events);
 
-    List<Notification> notifications = events.parallelStream()
+    List<NotificationEntity> notifications = events.parallelStream()
       .flatMap(subscriptionService::fireForEvent)
       .map(notificationMapper::map)
       .collect(Collectors.toList());

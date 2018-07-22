@@ -1,7 +1,7 @@
 package be.stijnhooft.portal.notifications.dtos;
 
 import be.stijnhooft.portal.model.domain.Event;
-import be.stijnhooft.portal.notifications.entities.Subscription;
+import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import lombok.*;
 
 /** Combination of a subscription and the event for which it fires **/
@@ -11,7 +11,7 @@ import lombok.*;
 public class FiringSubscription {
 
   @NonNull
-  private Subscription subscription;
+  private SubscriptionEntity subscription;
 
   @NonNull
   private Event event;

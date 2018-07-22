@@ -5,6 +5,12 @@ These notifications can be delivered to the user by so called *notification-plug
 
 With the front-end, it's possible to *subscribe to events*, and to *define how to transform these into notifications*.
 
+## Config in the Spring cloud config server
+This module needs to fetch config from the Spring cloud config server.
+
+| setting key | description |
+| ----------- | ----------------------------------------------- |
+| url         | the base url where this application is deployed |
 
 ## Development server
 

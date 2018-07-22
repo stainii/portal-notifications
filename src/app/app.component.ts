@@ -13,7 +13,6 @@ export class AppComponent {
   constructor(private _notificationService: NotificationService) {
     this._notificationService.findActiveNotifications().subscribe(notifications => {
       this.notifications = notifications;
-      console.log(this.notifications);
     })
   }
 }

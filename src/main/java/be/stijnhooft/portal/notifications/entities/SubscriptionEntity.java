@@ -7,11 +7,11 @@ import javax.persistence.*;
 
 @ToString @EqualsAndHashCode
 @Getter
-@Entity
+@Entity @Table(name = "subscription")
 @AllArgsConstructor @NoArgsConstructor
 @SequenceGenerator( name = "subscriptionIdGenerator",
   sequenceName = "subscription_id_sequence")
-public class Subscription {
+public class SubscriptionEntity {
 
   @Id
   @GeneratedValue(generator = "subscriptionIdGenerator")
@@ -35,7 +35,7 @@ public class Subscription {
   @Getter
   @NonNull
   @Embedded
-  private SubscriptionMappingToNotification mappingToNotification;
+  private SubscriptionMappingToNotificationEmbeddable mappingToNotification;
 
   @Getter
   @NonNull

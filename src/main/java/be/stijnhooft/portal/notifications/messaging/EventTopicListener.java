@@ -22,7 +22,6 @@ public class EventTopicListener {
 
     @StreamListener(EventTopic.INPUT)
     public void log(List<Event> events) {
-        System.out.println(events);
         eventService.receiveEvents(events);
     }
 

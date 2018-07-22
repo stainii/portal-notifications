@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 @Getter
 @Embeddable
 @AllArgsConstructor @NoArgsConstructor
-public class SubscriptionMappingToNotification {
+public class SubscriptionMappingToNotificationEmbeddable {
 
 
   /** How should the title of the notification be assembled? Should be a Spring EL expression.

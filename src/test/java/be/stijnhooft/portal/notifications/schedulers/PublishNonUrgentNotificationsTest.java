@@ -1,7 +1,9 @@
 package be.stijnhooft.portal.notifications.schedulers;
 
-import be.stijnhooft.portal.notifications.entities.Notification;
+import be.stijnhooft.portal.notifications.entities.NotificationEntity;
+import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
+import be.stijnhooft.portal.notifications.model.Notification;
 import be.stijnhooft.portal.notifications.model.NotificationUrgency;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import org.junit.Test;
@@ -31,21 +33,27 @@ public class PublishNonUrgentNotificationsTest {
     @Mock
     private NotificationPublisher notificationPublisher;
 
+    @Mock
+    private NotificationMapper notificationMapper;
+
     @Test
     public void publishNonUrgentNotificationsWhenTheyExist() {
         //data set
+        List<NotificationEntity> notificationEntities = Arrays.asList(new NotificationEntity());
         List<Notification> notifications = Arrays.asList(new Notification());
 
         //mock
-        doReturn(notifications).when(notificationRepository).findByUrgencyAndDateGreaterThanEqual(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
+        doReturn(notificationEntities).when(notificationRepository).findByUrgencyAndDateGreaterThanEqual(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
+        doReturn(notifications).when(notificationMapper).mapEntitiesToModel(notificationEntities);
 
         //execute
         publishNonUrgentNotifications.publishNonUrgentNotifications();
 
         //verify
         verify(notificationRepository).findByUrgencyAndDateGreaterThanEqual(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
+        verify(notificationMapper).mapEntitiesToModel(notificationEntities);
         verify(notificationPublisher).publish(notifications);
-        verifyNoMoreInteractions(notificationRepository, notificationPublisher);
+        verifyNoMoreInteractions(notificationRepository, notificationPublisher, notificationMapper);
     }
 
     @Test
@@ -58,6 +66,6 @@ public class PublishNonUrgentNotificationsTest {
 
         //verify
         verify(notificationRepository).findByUrgencyAndDateGreaterThanEqual(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
-        verifyNoMoreInteractions(notificationRepository, notificationPublisher);
+        verifyNoMoreInteractions(notificationRepository, notificationPublisher, notificationMapper);
     }
 }

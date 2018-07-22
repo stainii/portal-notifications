@@ -2,7 +2,7 @@ package be.stijnhooft.portal.notifications.services;
 
 import be.stijnhooft.portal.model.domain.Event;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
-import be.stijnhooft.portal.notifications.entities.Subscription;
+import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import be.stijnhooft.portal.notifications.repositories.SubscriptionRepository;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +40,11 @@ public class SubscriptionService {
                 .map(subscription -> new FiringSubscription(subscription, event));
     }
 
-    public List<Subscription> findAll() {
+    public List<SubscriptionEntity> findAll() {
         return subscriptionRepository.findAll();
     }
 
-    public Subscription createOrUpdate(@NonNull Subscription subscription) {
+    public SubscriptionEntity createOrUpdate(@NonNull SubscriptionEntity subscription) {
         return subscriptionRepository.saveAndFlush(subscription);
     }
 }

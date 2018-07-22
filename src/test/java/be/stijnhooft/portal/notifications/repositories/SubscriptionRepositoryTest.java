@@ -1,7 +1,7 @@
 package be.stijnhooft.portal.notifications.repositories;
 
 import be.stijnhooft.portal.notifications.PortalNotifications;
-import be.stijnhooft.portal.notifications.entities.Subscription;
+import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -37,7 +37,7 @@ public class SubscriptionRepositoryTest {
   @DatabaseSetup("/datasets/SubscriptionRepositoryTest-findByOrigin-initial.xml")
   @DatabaseTearDown("/datasets/clear.xml")
   public void findByOrigin() {
-    List<Subscription> subscriptions = subscriptionRepository.findByOrigin("test");
+    List<SubscriptionEntity> subscriptions = subscriptionRepository.findByOrigin("test");
     assertEquals(1, subscriptions.size());
     assertEquals(Long.valueOf(1), subscriptions.get(0).getId());
   }
@@ -46,7 +46,7 @@ public class SubscriptionRepositoryTest {
   @DatabaseSetup("/datasets/SubscriptionRepositoryTest-findByOrigin-initial.xml")
   @DatabaseTearDown("/datasets/clear.xml")
   public void findByOriginWhenNothingFound() {
-    List<Subscription> subscriptions = subscriptionRepository.findByOrigin("bla");
+    List<SubscriptionEntity> subscriptions = subscriptionRepository.findByOrigin("bla");
     assertEquals(0, subscriptions.size());
   }
 

@@ -26,7 +26,7 @@ describe('NotificationService', () => {
         notificationService.findActiveNotifications().subscribe();
 
         backend.expectOne({
-          url: '/api/notification/?read=false',
+          url: '/api/notification/?onlyUnread=true',
           method: 'GET'
         });
       })
