@@ -32,4 +32,18 @@ describe('NotificationService', () => {
       })
     )
   );
+
+    it("should call the webservice when marking a notification as read",
+        async(
+            inject([NotificationService, HttpTestingController], (notificationService: NotificationService, backend: HttpTestingController) => {
+
+                notificationService.markAsRead(100).subscribe();
+
+                backend.expectOne({
+                    url: '/api/notification/100/read/',
+                    method: 'PUT'
+                });
+            })
+        )
+    );
 });

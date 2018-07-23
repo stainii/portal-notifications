@@ -1,6 +1,7 @@
-<div class="card" *ngIf="notification">
+<div class="card" *ngIf="notification && !read">
   <div class="card-header">
-    <span class="important">{{notification.origin}}</span>, {{calculateTimeSinceNotificationPoppedUp(notification)}} ago...
+      <span class="important">{{notification.origin}}</span><span>, {{calculateTimeSinceNotificationPoppedUp(notification)}} ago...</span>
+      <a (click)="markAsRead(notification.id, $event)" class="card-close">x</a>
   </div>
   <div class="card-body">
     <h4 class="card-title">{{notification.title}}</h4>

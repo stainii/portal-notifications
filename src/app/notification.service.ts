@@ -11,4 +11,11 @@ export class NotificationService {
     return this._http.get<Notification[]>("/api/notification/?onlyUnread=true");
   }
 
+  markAsRead(id: number) {
+      return this._http.put("/api/notification/" + id + "/read/", {
+          id: id,
+          read: true
+      });
+  }
+
 }
