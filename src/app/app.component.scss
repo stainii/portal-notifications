@@ -1,38 +1,26 @@
 @import "../../node_modules/stijnhooft-portal-front-end-library/style/app";
 
-
-.notificationList {
-  flex-grow: 2;
-  background: $background-colour;
-  padding: 20px 100px;
-
-  .noNotifications {
-    display: block;
-    margin: 0 auto;
-
-    img {
-      max-width: 100%;
-      max-height: 500px;
-      display: block;
-      margin: 0 auto;
-    }
-    p {
-      font-size: 30pt;
-      text-align: center;
-      font-family: $cursive-font;
-    }
-  }
+$menu-width: 30px;
+$menu-height: 30px;
+.menu {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: $menu-width;
+    height: $menu-height;
+    margin: 0;
+    padding-left: $menu-width / 4;
+    padding-top: 3px;
+    z-index: 100;
 }
-
-@media all and (max-width: 640px){
-  .notificationList {
-    padding: 20px 20px;
-    .noNotifications {
-      p {
-        font-size: 16pt;
-        text-align: center;
-      }
-    }
-  }
+.menu.light {
+    background-color: $background-colour;
+    color: $dark-background;
 }
-
+.menu.dark {
+    background-color: $dark-background;
+    color: $background-colour;
+}
+.menu * {
+    cursor: pointer;
+}

@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Notification} from "./notification.model";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class NotificationService {
 
   constructor(private _http: HttpClient) { }

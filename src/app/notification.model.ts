@@ -1,4 +1,4 @@
-import {NotificationAction} from "./notification-action";
+import {NotificationAction} from "./notification-action.model";
 
 export interface Notification {
 

@@ -1,6 +1,4 @@
 import {Component} from '@angular/core';
-import {NotificationService} from "./notification.service";
-import {Notification} from "./notification.model";
 
 @Component({
   selector: 'app-root',
@@ -8,11 +6,18 @@ import {Notification} from "./notification.model";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  notifications: Notification[];
 
-  constructor(private _notificationService: NotificationService) {
-    this._notificationService.findActiveNotifications().subscribe(notifications => {
-      this.notifications = notifications;
-    })
-  }
+    active: string;
+
+    constructor() {
+        this.activateNotificationList();
+    }
+
+    activateNotificationList(): void {
+        this.active = "NOTIFICATION_LIST";
+    }
+
+    activateSubscriptionEditor(): void {
+        this.active = "SUBSCRIPTION_EDITOR";
+    }
 }

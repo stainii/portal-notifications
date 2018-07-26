@@ -1,16 +1,13 @@
-<div>
-  <div class="notificationList">
-
-    <div *ngIf="notifications && notifications.length == 0"
-         class="noNotifications">
-      <img src="assets/imgs/no_notifications.png" />
-      <p>Relax! Nothing else to do.</p>
-    </div>
-
-    <app-notification
-      *ngFor="let notification of notifications"
-      [notification]="notification">
-    </app-notification>
-
-  </div>
+<div class="menu" [ngClass]="{'light': active === 'SUBSCRIPTION_EDITOR', 'dark': active === 'NOTIFICATION_LIST'}">
+    <a (click)="activateNotificationList()"
+       *ngIf="active === 'SUBSCRIPTION_EDITOR'">
+        <fa-icon [icon]="'bell'"></fa-icon>
+    </a>
+    <a (click)="activateSubscriptionEditor()"
+       *ngIf="active === 'NOTIFICATION_LIST'">
+        <fa-icon [icon]="'cog'"></fa-icon>
+    </a>
 </div>
+
+<app-notification-list *ngIf="active === 'NOTIFICATION_LIST'"></app-notification-list>
+<app-subscription-editor *ngIf="active === 'SUBSCRIPTION_EDITOR'"></app-subscription-editor>
