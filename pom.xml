@@ -234,6 +234,7 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
+                        <phase>test</phase>
                         <configuration>
                             <arguments>run test-once</arguments>
                         </configuration>
@@ -243,6 +244,7 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
+                        <phase>prepare-package</phase>
                         <configuration>
                             <arguments>run build</arguments>
                         </configuration>
