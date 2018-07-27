@@ -1,6 +1,13 @@
 <div class="subscription-editor">
     <div class="fade-in">
         <h1>Subscriptions</h1>
-        Menu links, details rechts
+        <div class="grid">
+            <app-subscription-list [subscriptions]="subscriptions"
+                                   (subscriptionSelected)="selectSubscription($event)">
+            </app-subscription-list>
+            <app-subscription-details   [subscription]="currentlyEditing"
+                                        (onSave)="save($event)">
+            </app-subscription-details>
+        </div>
     </div>
 </div>

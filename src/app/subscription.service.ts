@@ -14,4 +14,12 @@ export class SubscriptionService {
         return this._http.get<Subscription[]>("/api/subscription/");
     }
 
+    create(subscription: Subscription) {
+        return this._http.post<Subscription>("/api/subscription/", subscription);
+    }
+
+    update(subscription: Subscription) {
+        return this._http.put<Subscription>("/api/subscription/" + subscription.id + "/", subscription);
+    }
+
 }

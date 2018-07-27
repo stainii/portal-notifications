@@ -10,14 +10,31 @@ import {Subscription} from "../subscription.model";
 export class SubscriptionEditorComponent implements OnInit {
 
     subscriptions: Subscription[];
+    currentlyEditing: Subscription;
 
     constructor(private _subscriptionService: SubscriptionService) {
     }
 
     ngOnInit() {
         this._subscriptionService.findAll().subscribe(subscriptions => {
-            this.subscriptions = subscriptions;
+            if (subscriptions && subscriptions.length > 0) {
+                this.subscriptions = subscriptions;
+            }
         })
+    }
+
+    selectSubscription(subscription: Subscription) {
+        this.currentlyEditing = subscription;
+    }
+
+    save(subscription: Subscription) {
+        if (subscription.id) {
+            this._subscriptionService.update(subscription).subscribe();
+        } else {
+            this._subscriptionService.create(subscription).subscribe(persistedSubscription => {
+                subscription.id = persistedSubscription.id;
+            });
+        }
     }
 
 }

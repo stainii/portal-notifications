@@ -1,4 +1,4 @@
-export interface SubscriptionMappingToNotification {
+export class SubscriptionMappingToNotification {
 
     /** How should the title of the notification be assembled? Should be a Spring EL expression.
      * Example:

@@ -1,9 +1,13 @@
 import {SubscriptionMappingToNotification} from "./subscription-mapping-to-notification.model";
 import {NotificationUrgency} from "./notification-urgency.model";
 
-export interface Subscription {
+export class Subscription {
 
-    id: number,
+    constructor() {
+        this.mappingToNotification = new SubscriptionMappingToNotification();
+    }
+
+    id: number;
 
     /** The origin that sends an data event **/
     origin: string;

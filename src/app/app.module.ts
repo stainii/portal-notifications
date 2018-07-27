@@ -10,6 +10,9 @@ import {SubscriptionEditorComponent} from './subscription-editor/subscription-ed
 /* manage font-awesome icons */
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faBell, faCog} from '@fortawesome/free-solid-svg-icons';
+import {SubscriptionListComponent} from './subscription-list/subscription-list.component';
+import {SubscriptionDetailsComponent} from './subscription-details/subscription-details.component';
+import {FormsModule} from "@angular/forms";
 
 library.add(faBell);
 library.add(faCog);
@@ -19,12 +22,15 @@ library.add(faCog);
         AppComponent,
         NotificationComponent,
         NotificationListComponent,
-        SubscriptionEditorComponent
+        SubscriptionEditorComponent,
+        SubscriptionListComponent,
+        SubscriptionDetailsComponent
     ],
     imports: [
         BrowserModule,
         HttpClientModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        FormsModule
     ],
     bootstrap: [AppComponent]
 })

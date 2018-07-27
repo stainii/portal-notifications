@@ -1,0 +1,32 @@
+@import "../app.component";
+
+.subscription-list {
+    margin-right: 20px;
+}
+
+.subscription-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.subscription-list li {
+    padding: 10px;
+    background-color: #34343f;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+}
+.subscription-list li:hover, .subscription-list li:focus, .subscription-list li:active {
+    padding: 10px;
+    background-color: $highlight-colour;
+}
+.subscription-list li.active {
+    background-color: $main-colour;
+}
+
+.subscription-list .btn {
+    width: 100%;
+}
+
+a {
+    cursor: pointer;
+}

@@ -1,0 +1,70 @@
+<form #subscriptionForm="ngForm" *ngIf="subscription">
+    <div class="form-group">
+        <label for="origin">Origin</label>
+        <input id="origin" name="origin"
+               class="form-control"
+               [(ngModel)]="subscription.origin"
+               placeholder="My app"
+               required />
+    </div>
+    <div class="form-group">
+        <label for="activationCondition">Activation condition</label>
+        <input id="activationCondition" name="activationCondition"
+               class="form-control"
+               [(ngModel)]="subscription.activationCondition"
+               placeholder="Always on? Use true"
+               required />
+    </div>
+    <div class="form-group">
+        <label for="urgency">Urgency</label>
+        <select id="urgency" name="urgency"
+                class="form-control"
+                [(ngModel)]="subscription.urgency"
+                required >
+            <option [value]="'PUBLISH_IMMEDIATELY'">Publish immediately</option>
+            <option [value]="'PUBLISH_WITHIN_24_HOURS'">Publish within 24 hours</option>
+        </select>
+    </div>
+
+    <hr>
+
+
+    <h3>Mapping</h3>
+    <div class="form-group">
+        <label for="title">Title</label>
+        <textarea id="title" name="title"
+                  class="form-control"
+                  [(ngModel)]="subscription.mappingToNotification.mappingOfTitle"
+                  required>
+        </textarea>
+    </div>
+    <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message"
+                  class="form-control"
+                  [(ngModel)]="subscription.mappingToNotification.mappingOfMessage"
+                  required>
+        </textarea>
+    </div>
+    <div class="form-group">
+        <label for="actionText">Action button text</label>
+        <input id="actionText" name="actionText"
+               class="form-control"
+               [(ngModel)]="subscription.mappingToNotification.mappingOfActionText"
+               placeholder="Something like 'Cool!'"
+               required />
+    </div>
+    <div class="form-group">
+        <label for="actionUrl">Action button url</label>
+        <input id="actionUrl" name="actionUrl"
+               class="form-control"
+               [(ngModel)]="subscription.mappingToNotification.mappingOfActionUrl"
+               placeholder="Something like 'http://www.stijnhooft.be'"
+               required />
+    </div>
+
+    <button type="submit"
+            [disabled]="!subscriptionForm.form.valid"
+            class="btn btn-primary"
+            (click)="save()">Save</button>
+</form>
