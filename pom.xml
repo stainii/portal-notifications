@@ -188,6 +188,13 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
 
+        <!-- build when using jdk 9+ -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
         <!-- test dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
