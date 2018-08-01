@@ -400,4 +400,11 @@
         </repository>
     </repositories>
 
+    <distributionManagement>
+        <repository>
+            <id>portal-ci-nexus-releases</id>
+            <url>http://portal-ci.westeurope.cloudapp.azure.com:8081/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
+
 </project>
