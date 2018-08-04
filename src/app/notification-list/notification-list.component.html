@@ -8,7 +8,8 @@
 
     <app-notification
         *ngFor="let notification of notifications"
-        [notification]="notification">
+        [notification]="notification"
+        (onRead)="markAsRead(notification)">
     </app-notification>
 
 </div>

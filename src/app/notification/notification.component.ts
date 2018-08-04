@@ -1,35 +1,39 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Notification} from "../notification.model";
 import {DateService} from "../date.service";
 import {NotificationService} from "../notification.service";
 
 @Component({
-  selector: 'app-notification',
-  templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+    selector: 'app-notification',
+    templateUrl: './notification.component.html',
+    styleUrls: ['./notification.component.scss']
 })
 export class NotificationComponent implements OnInit {
 
-  @Input()
-  notification: Notification;
+    @Input()
+    notification: Notification;
 
-  @Output()
-  read: boolean = false;
+    read: boolean = false;
 
-  constructor(private dateService: DateService,
-              private _notificationService: NotificationService) { }
+    @Output()
+    onRead: EventEmitter<Notification> = new EventEmitter<Notification>();
 
-  ngOnInit() {
-  }
+    constructor(private dateService: DateService,
+                private _notificationService: NotificationService) {
+    }
 
-  calculateTimeSinceNotificationPoppedUp(notification: Notification) {
-    return this.dateService.calculateDifference(this.dateService.now(), notification.date);
-  }
+    ngOnInit() {
+    }
 
-  markAsRead(id: number, $event: Event) {
-      $event.stopPropagation();
-      this._notificationService.markAsRead(id).subscribe(() => {
-        this.read = true;
-      });
-  }
+    calculateTimeSinceNotificationPoppedUp(notification: Notification) {
+        return this.dateService.calculateDifference(this.dateService.now(), notification.date);
+    }
+
+    markAsRead(id: number, $event: Event) {
+        $event.stopPropagation();
+        this._notificationService.markAsRead(id).subscribe(() => {
+            this.read = true;
+            this.onRead.emit(this.notification);
+        });
+    }
 }

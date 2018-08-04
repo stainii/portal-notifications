@@ -17,4 +17,8 @@ export class NotificationListComponent {
         })
     }
 
+    markAsRead(notification: Notification) {
+        this.notifications = this.notifications.filter(obj => obj !== notification);
+    }
+
 }
