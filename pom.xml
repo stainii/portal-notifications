@@ -63,7 +63,6 @@
         <!-- versions of dependencies -->
         <java.version>1.8</java.version>
         <javaee.api.version>7.0</javaee.api.version>
-        <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
         <maven.war.plugin.version>3.0.0</maven.war.plugin.version>
         <frontend.maven.plugin.version>1.4</frontend.maven.plugin.version>
     </properties>
@@ -236,7 +235,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>${maven.resources.plugin.version}</version>
+                <version>3.0.2</version>
             </plugin>
 
             <plugin>
@@ -267,7 +266,6 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <phase>test</phase>
                         <configuration>
                             <arguments>run test-once</arguments>
                         </configuration>
@@ -277,7 +275,6 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <phase>prepare-package</phase>
                         <configuration>
                             <arguments>run build</arguments>
                         </configuration>

@@ -19,6 +19,7 @@ export class NotificationListComponent {
 
     markAsRead(notification: Notification) {
         this.notifications = this.notifications.filter(obj => obj !== notification);
+        console.log("Marked notification as read", notification);
     }
 
 }
