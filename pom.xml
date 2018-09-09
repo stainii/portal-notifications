@@ -58,7 +58,6 @@
         <rabbitmq-host>localhost</rabbitmq-host>
         <rabbitmq-port>5672</rabbitmq-port>
         <eureka.server.uri>http://localhost:8761</eureka.server.uri>
-        <config.server.uri>http://localhost:2006</config.server.uri>
 
         <!-- versions of dependencies -->
         <java.version>1.8</java.version>
@@ -340,7 +339,6 @@
                 <rabbitmq-host>portal-rabbitmq</rabbitmq-host>
                 <rabbitmq-port>5672</rabbitmq-port>
                 <eureka.server.uri>http://portal-eureka:8761</eureka.server.uri>
-                <config.server.uri>http://portal-config:2006</config.server.uri>
             </properties>
             <build>
                 <plugins>
