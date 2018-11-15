@@ -13,3 +13,9 @@ This module needs to fetch config from the Spring cloud config server.
 | setting key | description |
 | ----------- | ----------------------------------------------- |
 | url         | the base url where this application is deployed |
+
+## Environment variables
+| Name | Example value | Description | Required? |
+| ---- | ------------- | ----------- | -------- |
+| POSTGRES_PASSWORD | secret | Password to log in to the database | required
+| JAVA_OPTS_PORTAL_NOTIFICATIONS | -Xmx400m -Xms400m | Java opts you want to pass to the JVM | optional
