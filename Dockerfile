@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:11.0.1-jdk-sid
 VOLUME /tmp
 EXPOSE 2003
 ARG JAR_FILE
