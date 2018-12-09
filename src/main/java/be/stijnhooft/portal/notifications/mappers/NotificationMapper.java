@@ -24,7 +24,7 @@ public class NotificationMapper {
 
     private final ExpressionParser parser = new SpelExpressionParser();
 
-    @Value("${url}") // fetched from the config server
+    @Value("${baseUrl}")
     private String baseUrlOfThisDeployment;
 
     public NotificationEntity map(@NonNull FiringSubscription firingSubscription) {

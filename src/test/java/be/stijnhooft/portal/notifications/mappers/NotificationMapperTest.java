@@ -89,7 +89,7 @@ public class NotificationMapperTest {
         assertEquals(date, model.getDate());
         assertEquals(title, model.getTitle());
         assertEquals(message, model.getMessage());
-        assertEquals("http://this.should.be.fetched.from.config/api/notification/1/action/url/", model.getAction().getUrl());
+        assertEquals("https://please_overwrite/api/notification/1/action/url/", model.getAction().getUrl());
         assertEquals("url", model.getAction().getInternalUrl());
         assertEquals(actionText, model.getAction().getText());
         assertEquals(urgency, model.getUrgency());
