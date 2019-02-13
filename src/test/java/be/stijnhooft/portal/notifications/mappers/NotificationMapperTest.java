@@ -38,9 +38,10 @@ public class NotificationMapperTest {
         String mappingOfMessage = "'Task ' + data['taskName'] + ' is expiring. Due date was ' + data['dueDate'] + '.'";
         String mappingOfActionText = "'Open Housagotchi'";
         String mappingOfActionUrl = "data['url']";
+        String flowId = "flowId";
         SubscriptionMappingToNotificationEmbeddable mapping = new SubscriptionMappingToNotificationEmbeddable(mappingOfTitle, mappingOfMessage, mappingOfActionText, mappingOfActionUrl);
 
-        SubscriptionEntity subscription = new SubscriptionEntity(1L, "Housagotchi", "true", mapping, PUBLISH_IMMEDIATELY);
+        SubscriptionEntity subscription = new SubscriptionEntity(1L, "Housagotchi", "true", "false", mapping, PUBLISH_IMMEDIATELY);
 
         HashMap<String, String> data = new HashMap<>();
         data.put("taskName", "Ironing");
@@ -48,7 +49,7 @@ public class NotificationMapperTest {
         data.put("url", "http://housagotchi");
 
         LocalDateTime publishDate = LocalDateTime.now();
-        Event event = new Event("Housagotchi", publishDate, data);
+        Event event = new Event("Housagotchi", flowId, publishDate, data);
 
         //execute
         NotificationEntity result = notificationMapper.map(new FiringSubscription(subscription, event));
@@ -61,11 +62,13 @@ public class NotificationMapperTest {
         assertEquals("Open Housagotchi", result.getAction().getText());
         assertEquals("http://housagotchi", result.getAction().getInternalUrl());
         assertEquals(PUBLISH_IMMEDIATELY, result.getUrgency());
+        assertEquals(flowId, result.getFlowId());
+        assertNull(result.getCancelledAt());
         assertNull(result.getId());
     }
 
     @Test(expected = NullPointerException.class)
-    public void mapWHenProvidingNull() {
+    public void mapWhenProvidingNull() {
         notificationMapper.map(null);
     }
 
@@ -78,9 +81,11 @@ public class NotificationMapperTest {
         String message = "message";
         String actionUrl = "url";
         String actionText = "text";
+        String flowId = "f-id";
+        LocalDateTime cancellationDate = LocalDateTime.now();
         NotificationActionEmbeddable action = new NotificationActionEmbeddable(actionUrl, actionText);
         NotificationUrgency urgency = PUBLISH_WITHIN_24_HOURS;
-        NotificationEntity entity = new NotificationEntity(id, origin, date, title, message, action, urgency, false);
+        NotificationEntity entity = new NotificationEntity(id, origin, flowId, date, title, message, action, urgency, false, cancellationDate);
 
         Notification model = notificationMapper.mapEntityToModel(entity);
 

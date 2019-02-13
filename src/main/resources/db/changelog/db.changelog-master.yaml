@@ -1,105 +1,125 @@
 databaseChangeLog:
-  - changeSet:
-      id: 1
-      author: Stijn Hooft
-      changes:
-        - createTable:
-            tableName: notification
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: origin
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: date
-                  type: timestamp
-                  constraints:
-                    nullable: false
-              - column:
-                  name: title
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: message
-                  type: varchar(1000)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: action_url
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: action_text
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: urgency
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: read
-                  type: boolean
-                  constraints:
-                    nullable: false
-        - createSequence:
-            incrementBy: 50
-            sequenceName: notification_id_sequence
+    - changeSet:
+          id: 1
+          author: Stijn Hooft
+          changes:
+              - createTable:
+                    tableName: notification
+                    columns:
+                        - column:
+                              name: id
+                              type: bigint
+                              constraints:
+                                  primaryKey: true
+                                  nullable: false
+                        - column:
+                              name: origin
+                              type: varchar(255)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: date
+                              type: timestamp
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: title
+                              type: varchar(255)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: message
+                              type: varchar(1000)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: action_url
+                              type: varchar(255)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: action_text
+                              type: varchar(255)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: urgency
+                              type: varchar(50)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: read
+                              type: boolean
+                              constraints:
+                                  nullable: false
+              - createSequence:
+                    incrementBy: 50
+                    sequenceName: notification_id_sequence
 
-        - createTable:
-            tableName: subscription
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: origin
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: activation_condition
-                  type: varchar(1000)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: mapping_of_title
-                  type: varchar(1000)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: mapping_of_message
-                  type: varchar(1000)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: mapping_of_action_text
-                  type: varchar(1000)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: mapping_of_action_url
-                  type: varchar(1000)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: urgency
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-        - createSequence:
-              incrementBy: 50
-              sequenceName: subscription_id_sequence
+              - createTable:
+                    tableName: subscription
+                    columns:
+                        - column:
+                              name: id
+                              type: bigint
+                              constraints:
+                                  primaryKey: true
+                                  nullable: false
+                        - column:
+                              name: origin
+                              type: varchar(255)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: activation_condition
+                              type: varchar(1000)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: mapping_of_title
+                              type: varchar(1000)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: mapping_of_message
+                              type: varchar(1000)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: mapping_of_action_text
+                              type: varchar(1000)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: mapping_of_action_url
+                              type: varchar(1000)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: urgency
+                              type: varchar(50)
+                              constraints:
+                                  nullable: false
+              - createSequence:
+                    incrementBy: 50
+                    sequenceName: subscription_id_sequence
+    - changeSet:
+          id: 2
+          author: Stijn Hooft
+          changes:
+              - addColumn:
+                    tableName: notification
+                    columns:
+                        - column:
+                              name: flow_id
+                              type: varchar(255)
+                        - column:
+                              name: cancelled_at
+                              type: timestamp
+
+              - addColumn:
+                    tableName: subscription
+                    columns:
+                        - column:
+                              name: cancellation_condition
+                              type: varchar(1000)

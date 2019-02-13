@@ -23,75 +23,176 @@ import static org.mockito.Mockito.*;
 @RunWith(SpringRunner.class)
 public class EventServiceTest {
 
-  @InjectMocks
-  private EventService eventService;
+    @InjectMocks
+    private EventService eventService;
 
-  @Mock
-  private NotificationService notificationService;
+    @Mock
+    private NotificationService notificationService;
 
-  @Mock
-  private NotificationMapper notificationMapper;
+    @Mock
+    private NotificationMapper notificationMapper;
 
-  @Mock
-  private SubscriptionService subscriptionService;
-
-
-  @Test
-  public void receiveEvents() {
-    //data set
-    Event event1 = new Event("source1", LocalDateTime.now(), new HashMap<>());
-    Event event2 = new Event("source2", LocalDateTime.now(), new HashMap<>());
-    Event event3 = new Event("source3", LocalDateTime.now(), new HashMap<>());
-
-    FiringSubscription firingSubscription1 = new FiringSubscription(new SubscriptionEntity(), event1);
-    FiringSubscription firingSubscription2 = new FiringSubscription(new SubscriptionEntity(), event3);
-
-    NotificationEntity notification1 = new NotificationEntity(null, "source1", LocalDateTime.now(), "1", "1", new NotificationActionEmbeddable("1", "1"), NotificationUrgency.PUBLISH_WITHIN_24_HOURS, false);
-    NotificationEntity notification2 = new NotificationEntity(null, "source3", LocalDateTime.now(), "3", "3", new NotificationActionEmbeddable("3", "3"), NotificationUrgency.PUBLISH_IMMEDIATELY, false);
-
-    //mock
-    doReturn(Stream.of(firingSubscription1)).when(subscriptionService).fireForEvent(event1);
-    doReturn(Stream.empty()).when(subscriptionService).fireForEvent(event2);
-    doReturn(Stream.of(firingSubscription2)).when(subscriptionService).fireForEvent(event3);
-
-    doReturn(notification1).when(notificationMapper).map(firingSubscription1);
-    doReturn(notification2).when(notificationMapper).map(firingSubscription2);
-
-    //execute
-    eventService.receiveEvents(Arrays.asList(event1, event2, event3));
-
-    //verify
-    verify(subscriptionService).fireForEvent(event1);
-    verify(subscriptionService).fireForEvent(event2);
-    verify(subscriptionService).fireForEvent(event3);
-
-    verify(notificationMapper).map(firingSubscription1);
-    verify(notificationMapper).map(firingSubscription2);
-
-    verify(notificationService).saveAndIfUrgentThenPublish(Arrays.asList(notification1, notification2));
-
-    verifyNoMoreInteractions(subscriptionService, notificationMapper, notificationService);
-  }
+    @Mock
+    private SubscriptionService subscriptionService;
 
     @Test
-    public void receiveEventsButNothingShouldFire() {
+    public void receiveEventsWithOnlyActivationEvents() {
         //data set
-        Event event1 = new Event("source1", LocalDateTime.now(), new HashMap<>());
-        Event event2 = new Event("source2", LocalDateTime.now(), new HashMap<>());
-        Event event3 = new Event("source3", LocalDateTime.now(), new HashMap<>());
+        Event event1 = new Event("source1", "flow1", LocalDateTime.now(), new HashMap<>());
+        Event event2 = new Event("source2", "flow2", LocalDateTime.now(), new HashMap<>());
+        Event event3 = new Event("source3", "flow3", LocalDateTime.now(), new HashMap<>());
+
+        FiringSubscription firingSubscription1 = new FiringSubscription(new SubscriptionEntity(), event1);
+        FiringSubscription firingSubscription2 = new FiringSubscription(new SubscriptionEntity(), event3);
+
+        NotificationEntity notification1 = new NotificationEntity(null, "source1", "flow1", LocalDateTime.now(), "1", "1", new NotificationActionEmbeddable("1", "1"), NotificationUrgency.PUBLISH_WITHIN_24_HOURS, false, null);
+        NotificationEntity notification2 = new NotificationEntity(null, "source3", "flow3", LocalDateTime.now(), "3", "3", new NotificationActionEmbeddable("3", "3"), NotificationUrgency.PUBLISH_IMMEDIATELY, false, null);
 
         //mock
-        doReturn(Stream.empty()).when(subscriptionService).fireForEvent(event1);
-        doReturn(Stream.empty()).when(subscriptionService).fireForEvent(event2);
-        doReturn(Stream.empty()).when(subscriptionService).fireForEvent(event3);
+        doReturn(Stream.of(firingSubscription1)).when(subscriptionService).fireOnActivationCondition(event1);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event2);
+        doReturn(Stream.of(firingSubscription2)).when(subscriptionService).fireOnActivationCondition(event3);
+
+        doReturn(notification1).when(notificationMapper).map(firingSubscription1);
+        doReturn(notification2).when(notificationMapper).map(firingSubscription2);
+
+        doReturn(Stream.empty()).when(subscriptionService).fireOnCancellationCondition(event1);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnCancellationCondition(event2);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnCancellationCondition(event3);
 
         //execute
         eventService.receiveEvents(Arrays.asList(event1, event2, event3));
 
         //verify
-        verify(subscriptionService).fireForEvent(event1);
-        verify(subscriptionService).fireForEvent(event2);
-        verify(subscriptionService).fireForEvent(event3);
+        verify(subscriptionService).fireOnActivationCondition(event1);
+        verify(subscriptionService).fireOnActivationCondition(event2);
+        verify(subscriptionService).fireOnActivationCondition(event3);
+
+        verify(notificationMapper).map(firingSubscription1);
+        verify(notificationMapper).map(firingSubscription2);
+
+        verify(notificationService).saveAndIfUrgentThenPublish(Arrays.asList(notification1, notification2));
+
+        verify(subscriptionService).fireOnCancellationCondition(event1);
+        verify(subscriptionService).fireOnCancellationCondition(event2);
+        verify(subscriptionService).fireOnCancellationCondition(event3);
+
+        verifyNoMoreInteractions(subscriptionService, notificationMapper, notificationService);
+    }
+
+    @Test
+    public void receiveEventsWithOnlyCancellationEvents() {
+        //data set
+        Event event1 = new Event("source1", "flow1", LocalDateTime.now(), new HashMap<>());
+        Event event2 = new Event("source2", "flow2", LocalDateTime.now(), new HashMap<>());
+        Event event3 = new Event("source3", "flow3", LocalDateTime.now(), new HashMap<>());
+
+        FiringSubscription firingSubscription1 = new FiringSubscription(new SubscriptionEntity(), event1);
+        FiringSubscription firingSubscription2 = new FiringSubscription(new SubscriptionEntity(), event3);
+
+        NotificationEntity notification1 = new NotificationEntity(null, "source1", "flow1", LocalDateTime.now(), "1", "1", new NotificationActionEmbeddable("1", "1"), NotificationUrgency.PUBLISH_WITHIN_24_HOURS, false, null);
+        NotificationEntity notification2 = new NotificationEntity(null, "source3", "flow3", LocalDateTime.now(), "3", "3", new NotificationActionEmbeddable("3", "3"), NotificationUrgency.PUBLISH_IMMEDIATELY, false, null);
+
+        //mock
+        doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event1);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event2);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event3);
+
+        doReturn(notification1).when(notificationMapper).map(firingSubscription1);
+        doReturn(notification2).when(notificationMapper).map(firingSubscription2);
+
+        doReturn(Stream.of(firingSubscription1)).when(subscriptionService).fireOnCancellationCondition(event1);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnCancellationCondition(event2);
+        doReturn(Stream.of(firingSubscription2)).when(subscriptionService).fireOnCancellationCondition(event3);
+
+        //execute
+        eventService.receiveEvents(Arrays.asList(event1, event2, event3));
+
+        //verify
+        verify(subscriptionService).fireOnActivationCondition(event1);
+        verify(subscriptionService).fireOnActivationCondition(event2);
+        verify(subscriptionService).fireOnActivationCondition(event3);
+
+        verify(subscriptionService).fireOnCancellationCondition(event1);
+        verify(subscriptionService).fireOnCancellationCondition(event2);
+        verify(subscriptionService).fireOnCancellationCondition(event3);
+
+        verify(notificationService).cancelNotifications(Arrays.asList(event1, event3));
+
+        verifyNoMoreInteractions(subscriptionService, notificationMapper, notificationService);
+    }
+
+    @Test
+    public void receiveEventsWithAllEvents() {
+        //data set
+        Event event1 = new Event("source1", "flow1", LocalDateTime.now(), new HashMap<>());
+        Event event2 = new Event("source2", "flow2", LocalDateTime.now(), new HashMap<>());
+        Event event3 = new Event("source3", "flow3", LocalDateTime.now(), new HashMap<>());
+
+        FiringSubscription firingSubscription1 = new FiringSubscription(new SubscriptionEntity(), event1);
+        FiringSubscription firingSubscription2 = new FiringSubscription(new SubscriptionEntity(), event3);
+
+        NotificationEntity notification1 = new NotificationEntity(null, "source1", "flow1", LocalDateTime.now(), "1", "1", new NotificationActionEmbeddable("1", "1"), NotificationUrgency.PUBLISH_WITHIN_24_HOURS, false, null);
+
+        //mock
+        doReturn(Stream.of(firingSubscription1)).when(subscriptionService).fireOnActivationCondition(event1);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event2);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event3);
+
+        doReturn(notification1).when(notificationMapper).map(firingSubscription1);
+
+        doReturn(Stream.empty()).when(subscriptionService).fireOnCancellationCondition(event1);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnCancellationCondition(event2);
+        doReturn(Stream.of(firingSubscription2)).when(subscriptionService).fireOnCancellationCondition(event3);
+
+        //execute
+        eventService.receiveEvents(Arrays.asList(event1, event2, event3));
+
+        //verify
+        verify(subscriptionService).fireOnActivationCondition(event1);
+        verify(subscriptionService).fireOnActivationCondition(event2);
+        verify(subscriptionService).fireOnActivationCondition(event3);
+
+        verify(notificationMapper).map(firingSubscription1);
+
+        verify(notificationService).saveAndIfUrgentThenPublish(Arrays.asList(notification1));
+
+        verify(subscriptionService).fireOnCancellationCondition(event1);
+        verify(subscriptionService).fireOnCancellationCondition(event2);
+        verify(subscriptionService).fireOnCancellationCondition(event3);
+
+        verify(notificationService).cancelNotifications(Arrays.asList(event3));
+
+        verifyNoMoreInteractions(subscriptionService, notificationMapper, notificationService);
+    }
+
+    @Test
+    public void receiveEventsButNothingShouldFire() {
+        //data set
+        Event event1 = new Event("source1", "flow1", LocalDateTime.now(), new HashMap<>());
+        Event event2 = new Event("source2", "flow2", LocalDateTime.now(), new HashMap<>());
+        Event event3 = new Event("source3", "flow3", LocalDateTime.now(), new HashMap<>());
+
+        //mock
+        doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event1);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event2);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event3);
+
+        doReturn(Stream.empty()).when(subscriptionService).fireOnCancellationCondition(event1);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnCancellationCondition(event2);
+        doReturn(Stream.empty()).when(subscriptionService).fireOnCancellationCondition(event3);
+
+        //execute
+        eventService.receiveEvents(Arrays.asList(event1, event2, event3));
+
+        //verify
+        verify(subscriptionService).fireOnActivationCondition(event1);
+        verify(subscriptionService).fireOnActivationCondition(event2);
+        verify(subscriptionService).fireOnActivationCondition(event3);
+
+        verify(subscriptionService).fireOnCancellationCondition(event1);
+        verify(subscriptionService).fireOnCancellationCondition(event2);
+        verify(subscriptionService).fireOnCancellationCondition(event3);
 
         verifyNoMoreInteractions(subscriptionService, notificationMapper, notificationService);
     }

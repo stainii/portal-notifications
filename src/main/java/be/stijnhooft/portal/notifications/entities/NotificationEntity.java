@@ -6,41 +6,68 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity @Table(name = "notification")
-@ToString @EqualsAndHashCode
+@Entity
+@Table(name = "notification")
+@ToString
+@EqualsAndHashCode
 @Getter
-@SequenceGenerator( name = "notificationIdGenerator",
-  sequenceName = "notification_id_sequence")
-@AllArgsConstructor @NoArgsConstructor
+@SequenceGenerator(name = "notificationIdGenerator",
+    sequenceName = "notification_id_sequence")
+@AllArgsConstructor
+@NoArgsConstructor
 public class NotificationEntity {
 
-  @Id
-  @GeneratedValue(generator = "notificationIdGenerator")
-  private Long id;
+    @Id
+    @GeneratedValue(generator = "notificationIdGenerator")
+    private Long id;
 
-  /** The module that has pushed the notification **/
-  @NonNull
-  private String origin;
+    /**
+     * The module that has pushed the notification
+     **/
+    @NonNull
+    private String origin;
 
-  /** Date and that the notification has been pushed **/
-  @NonNull
-  private LocalDateTime date;
+    /**
+     * An identifier which is the same for correlating events, forming a flow of events.
+     * This way, when a "cancel" event is received,
+     * older corresponding notifications can looked for and cancelled.
+     **/
+    @NonNull
+    @Column(name = "flow_id")
+    private String flowId;
 
-  @NonNull
-  private String title;
+    /**
+     * Date and that the notification has been pushed
+     **/
+    @NonNull
+    private LocalDateTime date;
 
-  @NonNull
-  private String message;
+    @NonNull
+    private String title;
 
-  @Embedded
-  @NonNull
-  private NotificationActionEmbeddable action;
+    @NonNull
+    private String message;
 
-  @Enumerated(EnumType.STRING)
-  @NonNull
-  private NotificationUrgency urgency;
+    @Embedded
+    @NonNull
+    private NotificationActionEmbeddable action;
 
-  @Setter
-  private boolean read;
+    @Enumerated(EnumType.STRING)
+    @NonNull
+    private NotificationUrgency urgency;
+
+    @Setter
+    private boolean read;
+
+    /**
+     * When was this notification cancelled by another notification with the same flowId?
+     */
+    @Setter
+    @Column(name = "cancelled_at")
+    private LocalDateTime cancelledAt;
+
+    public boolean isCancelled() {
+        return cancelledAt != null;
+    }
 
 }

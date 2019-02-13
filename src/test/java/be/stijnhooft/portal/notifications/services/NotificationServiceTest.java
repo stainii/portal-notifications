@@ -1,5 +1,6 @@
 package be.stijnhooft.portal.notifications.services;
 
+import be.stijnhooft.portal.model.domain.Event;
 import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.exceptions.NotificationNotFoundException;
@@ -17,10 +18,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -42,13 +45,13 @@ public class NotificationServiceTest {
     public void saveAndIfUrgentThenPublish() {
         // data set
         NotificationEntity urgentNotificationEntity = new NotificationEntity(null, "Housagotchi",
-            LocalDateTime.now(), "urgent notification", "hurry up!",
+            "flow1", LocalDateTime.now(), "urgent notification", "hurry up!",
             new NotificationActionEmbeddable("url", "text"),
-            NotificationUrgency.PUBLISH_IMMEDIATELY, false);
+            NotificationUrgency.PUBLISH_IMMEDIATELY, false, null);
         NotificationEntity nonUrgentNotificationEntity = new NotificationEntity(null, "Housagotchi",
-            LocalDateTime.now(), "non-urgent notification", "chill...",
+            "flow2", LocalDateTime.now(), "non-urgent notification", "chill...",
             new NotificationActionEmbeddable("url", "text"),
-            NotificationUrgency.PUBLISH_WITHIN_24_HOURS, false);
+            NotificationUrgency.PUBLISH_WITHIN_24_HOURS, false, null);
         List<NotificationEntity> notificationEntities = Arrays.asList(urgentNotificationEntity, nonUrgentNotificationEntity);
 
         Notification urgentNotification = new Notification(1L, "Housagotchi",
@@ -92,7 +95,7 @@ public class NotificationServiceTest {
         verify(notificationRepository).findById(id);
         verifyNoMoreInteractions(notificationRepository);
 
-        assertEquals(true, notification.isRead());
+        assertTrue(notification.isRead());
     }
 
     @Test
@@ -112,7 +115,7 @@ public class NotificationServiceTest {
         verify(notificationRepository).findById(id);
         verifyNoMoreInteractions(notificationRepository);
 
-        assertEquals(false, notification.isRead());
+        assertFalse(notification.isRead());
     }
 
     @Test
@@ -132,7 +135,7 @@ public class NotificationServiceTest {
         verify(notificationRepository).findById(id);
         verifyNoMoreInteractions(notificationRepository);
 
-        assertEquals(false, notification.isRead());
+        assertFalse(notification.isRead());
     }
 
     @Test
@@ -152,7 +155,7 @@ public class NotificationServiceTest {
         verify(notificationRepository).findById(id);
         verifyNoMoreInteractions(notificationRepository);
 
-        assertEquals(true, notification.isRead());
+        assertTrue(notification.isRead());
     }
 
     @Test(expected = NullPointerException.class)
@@ -171,5 +174,21 @@ public class NotificationServiceTest {
 
         // execute
         notificationService.markAsRead(id, true);
+    }
+
+    @Test
+    public void cancelNotifications() {
+        // data set
+        Event event1 = new Event("Housagotchi", "abc", LocalDateTime.now().minusHours(1), new HashMap<>());
+        Event event2 = new Event("Housagotchi", "def", LocalDateTime.now().minusHours(2), new HashMap<>());
+        List<Event> events = Arrays.asList(event1, event2);
+
+        // execute
+        notificationService.cancelNotifications(events);
+
+        // verify and assert
+        verify(notificationRepository).cancelNotificationsWithFlowIdAndBefore(event1.getFlowId(), event1.getPublishDate());
+        verify(notificationRepository).cancelNotificationsWithFlowIdAndBefore(event2.getFlowId(), event2.getPublishDate());
+        verifyNoMoreInteractions(notificationMapper, notificationPublisher, notificationRepository);
     }
 }

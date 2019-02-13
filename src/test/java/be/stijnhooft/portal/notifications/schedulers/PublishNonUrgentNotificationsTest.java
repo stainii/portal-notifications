@@ -43,14 +43,14 @@ public class PublishNonUrgentNotificationsTest {
         List<Notification> notifications = Arrays.asList(new Notification());
 
         //mock
-        doReturn(notificationEntities).when(notificationRepository).findByUrgencyAndDateGreaterThanEqual(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
+        doReturn(notificationEntities).when(notificationRepository).findByUrgencyAndDateGreaterThanEqualAndCancelledAtIsNull(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
         doReturn(notifications).when(notificationMapper).mapEntitiesToModel(notificationEntities);
 
         //execute
         publishNonUrgentNotifications.publishNonUrgentNotifications();
 
         //verify
-        verify(notificationRepository).findByUrgencyAndDateGreaterThanEqual(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
+        verify(notificationRepository).findByUrgencyAndDateGreaterThanEqualAndCancelledAtIsNull(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
         verify(notificationMapper).mapEntitiesToModel(notificationEntities);
         verify(notificationPublisher).publish(notifications);
         verifyNoMoreInteractions(notificationRepository, notificationPublisher, notificationMapper);
@@ -59,13 +59,13 @@ public class PublishNonUrgentNotificationsTest {
     @Test
     public void publishNonUrgentNotificationsWhenNoneExist() {
         //mock
-        doReturn(new ArrayList<>()).when(notificationRepository).findByUrgencyAndDateGreaterThanEqual(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
+        doReturn(new ArrayList<>()).when(notificationRepository).findByUrgencyAndDateGreaterThanEqualAndCancelledAtIsNull(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
 
         //execute
         publishNonUrgentNotifications.publishNonUrgentNotifications();
 
         //verify
-        verify(notificationRepository).findByUrgencyAndDateGreaterThanEqual(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
+        verify(notificationRepository).findByUrgencyAndDateGreaterThanEqualAndCancelledAtIsNull(eq(NotificationUrgency.PUBLISH_WITHIN_24_HOURS), isA(LocalDateTime.class));
         verifyNoMoreInteractions(notificationRepository, notificationPublisher, notificationMapper);
     }
 }

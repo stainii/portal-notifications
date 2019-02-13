@@ -43,7 +43,7 @@ public class NotificationMapper {
         NotificationUrgency urgency = firingSubscription.getSubscription().getUrgency();
 
         NotificationActionEmbeddable action = new NotificationActionEmbeddable(actionUrl, actionName);
-        return new NotificationEntity(null, event.getSource(), event.getPublishDate(), title, message, action, urgency, false);
+        return new NotificationEntity(null, event.getSource(), event.getFlowId(), event.getPublishDate(), title, message, action, urgency, false, null);
     }
 
     public be.stijnhooft.portal.notifications.model.Notification mapEntityToModel(@NonNull NotificationEntity entity) {
