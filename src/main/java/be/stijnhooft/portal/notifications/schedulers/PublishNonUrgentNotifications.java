@@ -34,7 +34,7 @@ public class PublishNonUrgentNotifications {
     @Scheduled(cron = "0   18  *   *   *  *")
     public void publishNonUrgentNotifications() {
         log.info("Checking if non-urgent notifications need to be published");
-        List<NotificationEntity> notificationEntities = notificationRepository.findByUrgencyAndDateGreaterThanEqual(NotificationUrgency.PUBLISH_WITHIN_24_HOURS, LocalDateTime.now().minusDays(1));
+        List<NotificationEntity> notificationEntities = notificationRepository.findByUrgencyAndDateGreaterThanEqualAndCancelledAtIsNull(NotificationUrgency.PUBLISH_WITHIN_24_HOURS, LocalDateTime.now().minusDays(1));
         if (!notificationEntities.isEmpty()) {
             List<Notification> notifications = notificationMapper.mapEntitiesToModel(notificationEntities);
             notificationPublisher.publish(notifications);

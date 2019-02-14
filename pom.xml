@@ -4,7 +4,7 @@
 
     <groupId>be.stijnhooft</groupId>
     <artifactId>portal-notifications</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>portal-notifications</name>
@@ -36,7 +36,7 @@
     </issueManagement>
     <ciManagement>
         <system>Jenkins</system>
-        <url>http://portal-ci.westeurope.cloudapp.azure.com/</url>
+        <url>https://server.stijnhooft.be/jenkins/</url>
     </ciManagement>
 
     <parent>
@@ -86,7 +86,7 @@
         <dependency>
             <groupId>be.stijnhooft</groupId>
             <artifactId>portal-model</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>
@@ -151,22 +151,6 @@
             <artifactId>spring-cloud-netflix-eureka-client</artifactId>
             <version>2.0.0.M7</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-            <version>1.2.2.RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-config-client</artifactId>
         </dependency>
 
         <!-- support for Java 8 datetime types -->
@@ -336,23 +320,29 @@
             </snapshots>
         </repository>
         <repository>
-            <id>portal-ci-nexus-releases</id>
-            <url>http://portal-ci.westeurope.cloudapp.azure.com:8081/repository/maven-releases/</url>
+            <id>portal-nexus-releases</id>
+            <url>https://server.stijnhooft.be/nexus/repository/maven-releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
-            <id>portal-ci-nexus-snapshots</id>
-            <url>http://portal-ci.westeurope.cloudapp.azure.com:8081/repository/maven-snapshots/</url>
+            <id>portal-nexus-snapshots</id>
+            <url>https://server.stijnhooft.be/nexus/repository/maven-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
-            <id>portal-ci-nexus-releases</id>
-            <url>http://portal-ci.westeurope.cloudapp.azure.com:8081/repository/maven-releases/</url>
+            <id>portal-nexus-releases</id>
+            <url>https://server.stijnhooft.be/nexus/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>portal-ci-nexus-snapshots</id>
-            <url>http://portal-ci.westeurope.cloudapp.azure.com:8081/repository/maven-snapshots/</url>
+            <id>portal-nexus-snapshots</id>
+            <url>https://server.stijnhooft.be/nexus/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 

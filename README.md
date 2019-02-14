@@ -1,5 +1,5 @@
 # portal-notifications
-[![Build Status](http://portal-ci.westeurope.cloudapp.azure.com/buildStatus/icon?job=portal-notifications/master)](http://portal-ci.westeurope.cloudapp.azure.com/job/portal-notifications/job/master/)
+[![Build Status](https://server.stijnhooft.be/jenkins/buildStatus/icon?job=portal-notifications/master)](https://server.stijnhooft.be/jenkins/job/portal-notifications/job/master/)
 
 A module for my personal portal, which **listens to events from other modules, and turns them into notifications**.
 

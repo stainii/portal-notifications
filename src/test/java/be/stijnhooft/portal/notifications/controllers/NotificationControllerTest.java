@@ -52,7 +52,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("$[0].date", is("2017-10-24T10:02:10")))
             .andExpect(jsonPath("$[0].title", is("Title 3")))
             .andExpect(jsonPath("$[0].message", is("Message 3")))
-            .andExpect(jsonPath("$[0].action.url", is("http://this.should.be.fetched.from.config/api/notification/3/action/url/")))
+            .andExpect(jsonPath("$[0].action.url", is("https://please_overwrite/api/notification/3/action/url/")))
             .andExpect(jsonPath("$[0].action.text", is("Open Housagotchi")))
             .andExpect(jsonPath("$[0].urgency", is("PUBLISH_IMMEDIATELY")))
 
@@ -61,7 +61,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("$[1].date", is("2017-10-20T10:02:10")))
             .andExpect(jsonPath("$[1].title", is("Title 1")))
             .andExpect(jsonPath("$[1].message", is("Message 1")))
-            .andExpect(jsonPath("$[1].action.url", is("http://this.should.be.fetched.from.config/api/notification/1/action/url/")))
+            .andExpect(jsonPath("$[1].action.url", is("https://please_overwrite/api/notification/1/action/url/")))
             .andExpect(jsonPath("$[1].action.text", is("Open Housagotchi")))
             .andExpect(jsonPath("$[1].urgency", is("PUBLISH_IMMEDIATELY")));
     }
@@ -81,7 +81,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("$[0].date", is("2017-10-22T10:02:10")))
             .andExpect(jsonPath("$[0].title", is("Title 2")))
             .andExpect(jsonPath("$[0].message", is("Message 2")))
-            .andExpect(jsonPath("$[0].action.url", is("http://this.should.be.fetched.from.config/api/notification/2/action/url/")))
+            .andExpect(jsonPath("$[0].action.url", is("https://please_overwrite/api/notification/2/action/url/")))
             .andExpect(jsonPath("$[0].action.text", is("Open Housagotchi")))
             .andExpect(jsonPath("$[0].urgency", is("PUBLISH_IMMEDIATELY")));
     }
@@ -100,7 +100,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("$[2].date", is("2017-10-24T10:02:10")))
             .andExpect(jsonPath("$[2].title", is("Title 3")))
             .andExpect(jsonPath("$[2].message", is("Message 3")))
-            .andExpect(jsonPath("$[2].action.url", is("http://this.should.be.fetched.from.config/api/notification/3/action/url/")))
+            .andExpect(jsonPath("$[2].action.url", is("https://please_overwrite/api/notification/3/action/url/")))
             .andExpect(jsonPath("$[2].action.text", is("Open Housagotchi")))
             .andExpect(jsonPath("$[2].urgency", is("PUBLISH_IMMEDIATELY")))
 
@@ -110,7 +110,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("$[1].date", is("2017-10-22T10:02:10")))
             .andExpect(jsonPath("$[1].title", is("Title 2")))
             .andExpect(jsonPath("$[1].message", is("Message 2")))
-            .andExpect(jsonPath("$[1].action.url", is("http://this.should.be.fetched.from.config/api/notification/2/action/url/")))
+            .andExpect(jsonPath("$[1].action.url", is("https://please_overwrite/api/notification/2/action/url/")))
             .andExpect(jsonPath("$[1].action.text", is("Open Housagotchi")))
             .andExpect(jsonPath("$[1].urgency", is("PUBLISH_IMMEDIATELY")))
 
@@ -119,7 +119,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("$[0].date", is("2017-10-20T10:02:10")))
             .andExpect(jsonPath("$[0].title", is("Title 1")))
             .andExpect(jsonPath("$[0].message", is("Message 1")))
-            .andExpect(jsonPath("$[0].action.url", is("http://this.should.be.fetched.from.config/api/notification/1/action/url/")))
+            .andExpect(jsonPath("$[0].action.url", is("https://please_overwrite/api/notification/1/action/url/")))
             .andExpect(jsonPath("$[0].action.text", is("Open Housagotchi")))
             .andExpect(jsonPath("$[0].urgency", is("PUBLISH_IMMEDIATELY")));
     }
@@ -141,7 +141,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("date", is("2017-10-20T10:02:10")))
             .andExpect(jsonPath("title", is("Title 1")))
             .andExpect(jsonPath("message", is("Message 1")))
-            .andExpect(jsonPath("action.url", is("http://this.should.be.fetched.from.config/api/notification/1/action/url/")))
+            .andExpect(jsonPath("action.url", is("https://please_overwrite/api/notification/1/action/url/")))
             .andExpect(jsonPath("action.text", is("Open Housagotchi")))
             .andExpect(jsonPath("urgency", is("PUBLISH_IMMEDIATELY")));
     }
@@ -163,7 +163,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("date", is("2017-10-20T10:02:10")))
             .andExpect(jsonPath("title", is("Title 1")))
             .andExpect(jsonPath("message", is("Message 1")))
-            .andExpect(jsonPath("action.url", is("http://this.should.be.fetched.from.config/api/notification/1/action/url/")))
+            .andExpect(jsonPath("action.url", is("https://please_overwrite/api/notification/1/action/url/")))
             .andExpect(jsonPath("action.text", is("Open Housagotchi")))
             .andExpect(jsonPath("urgency", is("PUBLISH_IMMEDIATELY")));
     }

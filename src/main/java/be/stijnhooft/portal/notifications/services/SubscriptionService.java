@@ -12,6 +12,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 @Service
@@ -26,18 +27,25 @@ public class SubscriptionService {
     }
 
     /**
-     * When a subscription exists for an event, a firing subscription is returned.
-     * If no subscription exists, an empty optional is returned.
+     * When a subscription exists for an event and it's activation condition is met,
+     * a firing subscription is returned.
+     * If none apply, an empty optional is returned.
      * @param event event
      * @return firing subscription or empty optional
      */
-    public Stream<FiringSubscription> fireForEvent(Event event) {
-        StandardEvaluationContext context = new StandardEvaluationContext(event);
+    public Stream<FiringSubscription> fireOnActivationCondition(Event event) {
+        return fireOnCondition(event, SubscriptionEntity::getActivationCondition);
+    }
 
-        return subscriptionRepository.findByOrigin(event.getSource())
-                .stream()
-                .filter(subscription -> parser.parseExpression(subscription.getActivationCondition()).getValue(context, Boolean.class))
-                .map(subscription -> new FiringSubscription(subscription, event));
+    /**
+     * When a subscription exists for an event and it's cancellation condition is met,
+     * a firing subscription is returned.
+     * If none apply, an empty optional is returned.
+     * @param event event
+     * @return firing subscription or empty optional
+     */
+    public Stream<FiringSubscription> fireOnCancellationCondition(Event event) {
+        return fireOnCondition(event, SubscriptionEntity::getCancellationCondition);
     }
 
     public List<SubscriptionEntity> findAll() {
@@ -47,4 +55,13 @@ public class SubscriptionService {
     public SubscriptionEntity createOrUpdate(@NonNull SubscriptionEntity subscription) {
         return subscriptionRepository.saveAndFlush(subscription);
     }
+
+    private Stream<FiringSubscription> fireOnCondition(Event event, Function<SubscriptionEntity, String> condition) {
+        StandardEvaluationContext context = new StandardEvaluationContext(event);
+        return subscriptionRepository.findByOrigin(event.getSource())
+                .stream()
+                .filter(subscription -> parser.parseExpression(condition.apply(subscription)).getValue(context, Boolean.class))
+                .map(subscription -> new FiringSubscription(subscription, event));
+    }
+
 }
