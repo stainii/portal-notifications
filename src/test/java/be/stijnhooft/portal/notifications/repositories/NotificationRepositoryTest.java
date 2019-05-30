@@ -2,7 +2,6 @@ package be.stijnhooft.portal.notifications.repositories;
 
 import be.stijnhooft.portal.notifications.PortalNotifications;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
-import be.stijnhooft.portal.notifications.model.NotificationUrgency;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -40,40 +39,46 @@ public class NotificationRepositoryTest {
     private NotificationRepository notificationRepository;
 
     @Test
-    @DatabaseSetup("/datasets/NotificationRepositoryTest-findByReadOrderByDateDesc-initial.xml")
+    @DatabaseSetup("/datasets/NotificationRepositoryTest-findByReadAndPublishedIsTrueOrderByCreatedAtDesc-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
-    public void findByReadAndCancelledAtIsNullOrderByDateDescWhenFalse() {
-        List<NotificationEntity> unreadNotifications = notificationRepository.findByReadAndCancelledAtIsNullOrderByDateDesc(false);
+    public void findByReadAndCancelledAtIsNullAndPublishedIsTrueOrderByDateDescWhenFalse() {
+        List<NotificationEntity> unreadNotifications = notificationRepository.findByReadAndCancelledAtIsNullAndPublishedIsTrueOrderByCreatedAtDesc(false);
         assertEquals(2, unreadNotifications.size());
         assertEquals(Long.valueOf(3), unreadNotifications.get(0).getId());
         assertEquals(Long.valueOf(1), unreadNotifications.get(1).getId());
     }
 
     @Test
-    @DatabaseSetup("/datasets/NotificationRepositoryTest-findByReadOrderByDateDesc-initial.xml")
+    @DatabaseSetup("/datasets/NotificationRepositoryTest-findByReadAndPublishedIsTrueOrderByCreatedAtDesc-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
-    public void findByReadAndCancelledAtIsNullOrderByDateDescWhenTrue() {
-        List<NotificationEntity> unreadNotifications = notificationRepository.findByReadAndCancelledAtIsNullOrderByDateDesc(true);
+    public void findByReadAndCancelledAtIsNullAndPublishedIsTrueOrderByDateDescWhenTrue() {
+        List<NotificationEntity> unreadNotifications = notificationRepository.findByReadAndCancelledAtIsNullAndPublishedIsTrueOrderByCreatedAtDesc(true);
         assertEquals(1, unreadNotifications.size());
         assertEquals(Long.valueOf(2), unreadNotifications.get(0).getId());
     }
 
     @Test
-    @DatabaseSetup("/datasets/NotificationRepositoryTest-findByUrgency-initial.xml")
+    @DatabaseSetup("/datasets/NotificationRepositoryTest-findAllByPublishedIsTrueAndCancelledAtIsNullOrderByCreatedAtDesc-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
-    public void findByUrgencyAndDateGreaterThanEqualAndCancelledAtIsNullWhenPublishImmediately() {
-        List<NotificationEntity> unreadNotifications = notificationRepository.findByUrgencyAndDateGreaterThanEqualAndCancelledAtIsNull(NotificationUrgency.PUBLISH_IMMEDIATELY, LocalDateTime.of(2018, 4, 22, 18, 0));
-        assertEquals(1, unreadNotifications.size());
-        assertEquals(Long.valueOf(1), unreadNotifications.get(0).getId());
+    public void findAllByPublishedIsTrueAndCancelledAtIsNullOrderByDateDesc() {
+        List<NotificationEntity> unreadNotifications = notificationRepository.findAllByPublishedIsTrueAndCancelledAtIsNullOrderByCreatedAtDesc();
+        assertEquals(3, unreadNotifications.size());
+        assertEquals(Long.valueOf(3), unreadNotifications.get(0).getId());
+        assertEquals(Long.valueOf(2), unreadNotifications.get(1).getId());
+        assertEquals(Long.valueOf(1), unreadNotifications.get(2).getId());
     }
 
     @Test
-    @DatabaseSetup("/datasets/NotificationRepositoryTest-findByUrgency-initial.xml")
+    @DatabaseSetup("/datasets/NotificationRepositoryTest-findNotificationsThatShouldBePublishedBetween-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
-    public void findByUrgencyAndDateGreaterThanEqualAndCancelledAtIsNullWhenPublishWithin24Hours() {
-        List<NotificationEntity> unreadNotifications = notificationRepository.findByUrgencyAndDateGreaterThanEqualAndCancelledAtIsNull(NotificationUrgency.PUBLISH_WITHIN_24_HOURS, LocalDateTime.of(2018, 4, 22, 18, 0));
-        assertEquals(1, unreadNotifications.size());
-        assertEquals(Long.valueOf(2), unreadNotifications.get(0).getId());
+    public void findNotificationsThatShouldBePublishedBetween() {
+        LocalDateTime max = LocalDateTime.of(2019, 5, 30, 7, 36, 0);
+        LocalDateTime min = LocalDateTime.of(2019, 5, 30, 7, 35, 0);
+
+        List<NotificationEntity> unpublishedNotificationsThatShouldBePublished = notificationRepository.findNotificationsThatShouldBePublishedBetween(min, max);
+
+        assertEquals(1, unpublishedNotificationsThatShouldBePublished.size());
+        assertEquals(Long.valueOf(2), unpublishedNotificationsThatShouldBePublished.get(0).getId());
     }
 
     @Test
@@ -84,4 +89,5 @@ public class NotificationRepositoryTest {
     public void cancelNotificationsWithFlowIdAndBefore() {
         notificationRepository.cancelNotificationsWithFlowIdAndBefore("abc", LocalDateTime.of(2018, Month.OCTOBER, 23, 10, 8));
     }
+
 }

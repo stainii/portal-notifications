@@ -1,6 +1,6 @@
 package be.stijnhooft.portal.notifications.entities;
 
-import be.stijnhooft.portal.notifications.model.NotificationUrgency;
+import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @SequenceGenerator(name = "notificationIdGenerator",
     sequenceName = "notification_id_sequence")
 @AllArgsConstructor
+@RequiredArgsConstructor
 @NoArgsConstructor
 public class NotificationEntity {
 
@@ -36,12 +37,6 @@ public class NotificationEntity {
     @Column(name = "flow_id")
     private String flowId;
 
-    /**
-     * Date and that the notification has been pushed
-     **/
-    @NonNull
-    private LocalDateTime date;
-
     @NonNull
     private String title;
 
@@ -54,10 +49,20 @@ public class NotificationEntity {
 
     @Enumerated(EnumType.STRING)
     @NonNull
-    private NotificationUrgency urgency;
+    @Column(name = "publish_strategy")
+    private PublishStrategy publishStrategy;
 
-    @Setter
-    private boolean read;
+    /** Date and time that the notification has been created in the database **/
+    @NonNull
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    /**
+     * Date and time that the notification will need to be shown
+     **/
+    @NonNull
+    @Column(name = "scheduled_at")
+    private LocalDateTime scheduledAt;
 
     /**
      * When was this notification cancelled by another notification with the same flowId?
@@ -65,6 +70,16 @@ public class NotificationEntity {
     @Setter
     @Column(name = "cancelled_at")
     private LocalDateTime cancelledAt;
+
+    /**
+     * Has the notification been published?
+     */
+    @Setter
+    @Column(name = "published", nullable = false)
+    private boolean published;
+
+    @Setter
+    private boolean read;
 
     public boolean isCancelled() {
         return cancelledAt != null;

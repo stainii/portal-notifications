@@ -7,7 +7,7 @@
     mapping_of_message="Message 1"
     mapping_of_action_url="http://www.stijnhooft.be"
     mapping_of_action_text="Open Housagotchi"
-    urgency="PUBLISH_IMMEDIATELY"
+    publish_strategy="PUBLISH_IMMEDIATELY"
   />
   <subscription
     id="2"
@@ -17,6 +17,6 @@
     mapping_of_message="Message 1"
     mapping_of_action_url="http://www.stijnhooft.be"
     mapping_of_action_text="Open Housagotchi"
-    urgency="PUBLISH_IMMEDIATELY"
+    publish_strategy="PUBLISH_IMMEDIATELY"
   />
 </dataset>

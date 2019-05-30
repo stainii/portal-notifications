@@ -123,3 +123,74 @@ databaseChangeLog:
                         - column:
                               name: cancellation_condition
                               type: varchar(1000)
+
+    - changeSet:
+          id: 3
+          author: Stijn Hooft
+          changes:
+              - renameColumn:
+                    tableName: notification
+                    oldColumnName: date
+                    newColumnName: created_at
+
+              - addColumn:
+                    tableName: notification
+                    columns:
+                        - column:
+                              name: scheduled_at
+                              type: timestamp
+              - sql:
+                    sql: update notification set scheduled_at = created_at
+
+              - addNotNullConstraint:
+                    tableName: notification
+                    columnName: scheduled_at
+    - changeSet:
+          id: 4
+          author: Stijn Hooft
+          changes:
+              - renameColumn:
+                    tableName: notification
+                    oldColumnName: urgency
+                    newColumnName: publish_strategy
+
+              - update:
+                    tableName: notification
+                    columns:
+                        - column:
+                              name: publish_strategy
+                              value: PUBLISH_AT_SPECIFIC_DATE_TIME
+                    where: publish_strategy = 'PUBLISH_WITHIN_24_HOURS'
+
+              - renameColumn:
+                    tableName: subscription
+                    oldColumnName: urgency
+                    newColumnName: publish_strategy
+
+              - update:
+                    tableName: subscription
+                    columns:
+                        - column:
+                              name: publish_strategy
+                              value: PUBLISH_AT_SPECIFIC_DATE_TIME
+                    where: publish_strategy = 'PUBLISH_WITHIN_24_HOURS'
+
+    - changeSet:
+          id: 5
+          author: Stijn Hooft
+          changes:
+              - addColumn:
+                    tableName: notification
+                    columns:
+                        - column:
+                              name: published
+                              type: boolean
+                              defaultValueBoolean: false
+                              constraints:
+                                  nullable: false
+              - update:
+                    tableName: notification
+                    columns:
+                        - column:
+                              name: published
+                              valueBoolean: true

@@ -6,7 +6,7 @@ import be.stijnhooft.portal.notifications.exceptions.NotificationNotFoundExcepti
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
 import be.stijnhooft.portal.notifications.model.Notification;
-import be.stijnhooft.portal.notifications.model.NotificationUrgency;
+import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +34,11 @@ public class NotificationService {
     }
 
     public List<Notification> findByRead(boolean read) {
-        return map(notificationRepository.findByReadAndCancelledAtIsNullOrderByDateDesc(read));
+        return map(notificationRepository.findByReadAndCancelledAtIsNullAndPublishedIsTrueOrderByCreatedAtDesc(read));
     }
 
     public List<Notification> findAll() {
-        return map(notificationRepository.findAll());
+        return map(notificationRepository.findAllByPublishedIsTrueAndCancelledAtIsNullOrderByCreatedAtDesc());
     }
 
     public Collection<Notification> saveAndIfUrgentThenPublish(Collection<NotificationEntity> notificationEntities) {
@@ -70,7 +70,7 @@ public class NotificationService {
 
     private void publishUrgentNotifications(Collection<Notification> notifications) {
         List<Notification> urgentNotifications = notifications.stream()
-            .filter(notification -> notification.getUrgency() == NotificationUrgency.PUBLISH_IMMEDIATELY)
+            .filter(notification -> notification.getPublishStrategy() == PublishStrategy.PUBLISH_IMMEDIATELY)
             .collect(Collectors.toList());
         notificationPublisher.publish(urgentNotifications);
     }

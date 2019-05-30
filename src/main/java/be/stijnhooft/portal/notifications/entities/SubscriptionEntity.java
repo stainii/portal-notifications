@@ -1,6 +1,6 @@
 package be.stijnhooft.portal.notifications.entities;
 
-import be.stijnhooft.portal.notifications.model.NotificationUrgency;
+import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import lombok.*;
 
 import javax.persistence.*;
@@ -57,6 +57,7 @@ public class SubscriptionEntity {
     @Getter
     @NonNull
     @Enumerated(EnumType.STRING)
-    private NotificationUrgency urgency;
+    @Column(name = "publish_strategy")
+    private PublishStrategy publishStrategy;
 
 }
