@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 /**
@@ -38,12 +37,24 @@ public class PublishWithin24HoursPublishStrategy implements AbstractPublishStrat
     public LocalDateTime apply(@NonNull FiringSubscription firingSubscription) {
         List<NotificationEntity> notificationsThatArePlannedWithinTheNext24Hours = notificationRepository.findNotificationsThatShouldBePublishedBetween(DateUtils.now(clock), DateUtils.tomorrow(clock));
         if (notificationsThatArePlannedWithinTheNext24Hours.isEmpty()) {
+            return nextTimeItIs1600();
+        } else {
+            return notificationsThatArePlannedWithinTheNext24Hours.get(0).getScheduledAt();
+        }
+    }
+
+    private LocalDateTime nextTimeItIs1600() {
+        if (DateUtils.now(clock).getHour() >= 16) {
             return DateUtils.now(clock)
+                .plusDays(1)
                 .withHour(16)
                 .withMinute(0)
                 .withSecond(0);
         } else {
-            return notificationsThatArePlannedWithinTheNext24Hours.get(0).getScheduledAt();
+            return DateUtils.now(clock)
+                .withHour(16)
+                .withMinute(0)
+                .withSecond(0);
         }
     }
 

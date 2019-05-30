@@ -6,10 +6,10 @@ import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionMappingToNotificationEmbeddable;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -23,22 +23,13 @@ import static be.stijnhooft.portal.notifications.model.PublishStrategy.PUBLISH_W
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class PublishWithin24HoursPublishStrategyTest {
 
     private PublishWithin24HoursPublishStrategy strategy;
 
     @Mock
     private NotificationRepository notificationRepository;
-
-    private Clock clock = Clock.fixed(ZonedDateTime.of(2019, 5, 30, 12, 10, 12, 0, ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
-    private LocalDateTime now = LocalDateTime.of(2019, 5, 30, 12, 10, 12);
-    private LocalDateTime tomorrow = LocalDateTime.of(2019, 5, 31, 12, 10, 12);
-
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-        strategy = new PublishWithin24HoursPublishStrategy(notificationRepository, clock);
-    }
 
     @Test
     public void applyWhenAnotherNotificationWillBePublishedWithin24Hours() {
@@ -48,10 +39,16 @@ public class PublishWithin24HoursPublishStrategyTest {
         HashMap<String, String> data = new HashMap<>();
         LocalDateTime publishDate = LocalDateTime.now();
         Event event = new Event("Housagotchi", "flowId", publishDate, data);
+
         LocalDateTime expected = LocalDateTime.of(2019, 5, 30, 14, 0);
+        LocalDateTime now = LocalDateTime.of(2019, 5, 30, 12, 10, 12);
+        LocalDateTime tomorrow = LocalDateTime.of(2019, 5, 31, 12, 10, 12);
+        Clock clock = Clock.fixed(ZonedDateTime.of(2019, 5, 30, 12, 10, 12, 0, ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
 
         NotificationEntity otherNotification = new NotificationEntity();
         otherNotification.setScheduledAt(expected);
+
+        strategy = new PublishWithin24HoursPublishStrategy(notificationRepository, clock);
 
         // mock
         doReturn(Arrays.asList(otherNotification)).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(now, tomorrow);
@@ -67,13 +64,20 @@ public class PublishWithin24HoursPublishStrategyTest {
     }
 
     @Test
-    public void applyWhenNoOtherNotificationWillBePublishedWithin24Hours() {
+    public void applyWhenNoOtherNotificationWillBePublishedWithin24HoursAndCurrentTimeIsBefore1600() {
         //data set
         SubscriptionMappingToNotificationEmbeddable mapping = new SubscriptionMappingToNotificationEmbeddable("", "", "", "", "");
         SubscriptionEntity subscription = new SubscriptionEntity(1L, "Housagotchi", "true", "false", mapping, PUBLISH_WITHIN_24_HOURS);
         HashMap<String, String> data = new HashMap<>();
+
         LocalDateTime publishDate = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.of(2019, 5, 30, 12, 10, 12);
+        LocalDateTime tomorrow = LocalDateTime.of(2019, 5, 31, 12, 10, 12);
+        Clock clock = Clock.fixed(ZonedDateTime.of(2019, 5, 30, 12, 10, 12, 0, ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+
         Event event = new Event("Housagotchi", "flowId", publishDate, data);
+
+        strategy = new PublishWithin24HoursPublishStrategy(notificationRepository, clock);
 
         // mock
         doReturn(new ArrayList<>()).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(now, tomorrow);
@@ -86,5 +90,34 @@ public class PublishWithin24HoursPublishStrategyTest {
         verifyNoMoreInteractions(notificationRepository);
 
         assertEquals(now.withHour(16).withMinute(0).withSecond(0), result);
+    }
+
+    @Test
+    public void applyWhenNoOtherNotificationWillBePublishedWithin24HoursAndCurrentTimeIsAfter1600() {
+        //data set
+        SubscriptionMappingToNotificationEmbeddable mapping = new SubscriptionMappingToNotificationEmbeddable("", "", "", "", "");
+        SubscriptionEntity subscription = new SubscriptionEntity(1L, "Housagotchi", "true", "false", mapping, PUBLISH_WITHIN_24_HOURS);
+        HashMap<String, String> data = new HashMap<>();
+
+        LocalDateTime publishDate = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.of(2019, 5, 30, 16, 10, 12);
+        LocalDateTime tomorrow = LocalDateTime.of(2019, 5, 31, 16, 10, 12);
+        Clock clock = Clock.fixed(ZonedDateTime.of(2019, 5, 30, 16, 10, 12, 0, ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+
+        Event event = new Event("Housagotchi", "flowId", publishDate, data);
+
+        strategy = new PublishWithin24HoursPublishStrategy(notificationRepository, clock);
+
+        // mock
+        doReturn(new ArrayList<>()).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(now, tomorrow);
+
+        //execute
+        LocalDateTime result = strategy.apply(new FiringSubscription(subscription, event));
+
+        //assert
+        verify(notificationRepository).findNotificationsThatShouldBePublishedBetween(now, tomorrow);
+        verifyNoMoreInteractions(notificationRepository);
+
+        assertEquals(now.plusDays(1).withHour(16).withMinute(0).withSecond(0), result);
     }
 }

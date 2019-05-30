@@ -7,6 +7,7 @@ import be.stijnhooft.portal.notifications.model.Notification;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Component
 @Slf4j
+@EnableScheduling
 @Transactional
 public class PublishNotifications {
 
@@ -50,7 +52,6 @@ public class PublishNotifications {
         } else {
             publishNotifications(notificationEntities);
         }
-
 
     }
 
