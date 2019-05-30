@@ -71,7 +71,7 @@ public class EventServiceTest {
         verify(notificationMapper).map(firingSubscription1);
         verify(notificationMapper).map(firingSubscription2);
 
-        verify(notificationService).saveAndIfUrgentThenPublish(Arrays.asList(notification1, notification2));
+        verify(notificationService).save(Arrays.asList(notification1, notification2));
 
         verify(subscriptionService).fireOnCancellationCondition(event1);
         verify(subscriptionService).fireOnCancellationCondition(event2);
@@ -155,7 +155,7 @@ public class EventServiceTest {
 
         verify(notificationMapper).map(firingSubscription1);
 
-        verify(notificationService).saveAndIfUrgentThenPublish(Arrays.asList(notification1));
+        verify(notificationService).save(Arrays.asList(notification1));
 
         verify(subscriptionService).fireOnCancellationCondition(event1);
         verify(subscriptionService).fireOnCancellationCondition(event2);

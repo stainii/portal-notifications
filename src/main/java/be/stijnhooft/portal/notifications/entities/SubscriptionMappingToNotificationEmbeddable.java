@@ -2,6 +2,7 @@ package be.stijnhooft.portal.notifications.entities;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @ToString
@@ -20,6 +21,7 @@ public class SubscriptionMappingToNotificationEmbeddable {
      **/
     @Getter
     @NonNull
+    @Column(name = "mapping_of_title", nullable = false)
     private String mappingOfTitle;
 
     /**
@@ -29,6 +31,7 @@ public class SubscriptionMappingToNotificationEmbeddable {
      **/
     @Getter
     @NonNull
+    @Column(name = "mapping_of_message", nullable = false)
     private String mappingOfMessage;
 
     /**
@@ -37,6 +40,7 @@ public class SubscriptionMappingToNotificationEmbeddable {
      **/
     @Getter
     @NonNull
+    @Column(name = "mapping_of_action_text", nullable = false)
     private String mappingOfActionText;
 
     /**
@@ -45,6 +49,7 @@ public class SubscriptionMappingToNotificationEmbeddable {
      **/
     @Getter
     @NonNull
+    @Column(name = "mapping_of_action_url", nullable = false)
     private String mappingOfActionUrl;
 
     /**
@@ -52,7 +57,7 @@ public class SubscriptionMappingToNotificationEmbeddable {
      * Should be a Spring EL expression
      **/
     @Getter
-    @NonNull
+    @Column(name = "mapping_of_schedule_date_time")
     private String mappingOfScheduleDateTime;
 
     /**

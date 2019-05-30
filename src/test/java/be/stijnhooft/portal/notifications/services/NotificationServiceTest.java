@@ -42,43 +42,6 @@ public class NotificationServiceTest {
     private NotificationMapper notificationMapper;
 
     @Test
-    public void saveAndIfUrgentThenPublish() {
-        // data set
-        NotificationEntity urgentNotificationEntity = new NotificationEntity("Housagotchi",
-            "flow1", "urgent notification", "hurry up!",
-            new NotificationActionEmbeddable("url", "text"),
-            PublishStrategy.PUBLISH_IMMEDIATELY, LocalDateTime.now(), LocalDateTime.now());
-        NotificationEntity nonUrgentNotificationEntity = new NotificationEntity("Housagotchi",
-            "flow2", "non-urgent notification", "chill...",
-            new NotificationActionEmbeddable("url", "text"),
-            PublishStrategy.PUBLISH_AT_SPECIFIC_DATE_TIME, LocalDateTime.now(), LocalDateTime.now());
-        List<NotificationEntity> notificationEntities = Arrays.asList(urgentNotificationEntity, nonUrgentNotificationEntity);
-
-        Notification urgentNotification = new Notification(1L, "Housagotchi",
-            LocalDateTime.now(), "urgent notification", "hurry up!",
-            new NotificationAction("url", "text", "internalUrl"),
-            PublishStrategy.PUBLISH_IMMEDIATELY);
-        Notification nonUrgentNotification = new Notification(2L, "Housagotchi",
-            LocalDateTime.now(), "non-urgent notification", "chill...",
-            new NotificationAction("url", "text", "internalUrl"),
-            PublishStrategy.PUBLISH_AT_SPECIFIC_DATE_TIME);
-        List<Notification> notifications = Arrays.asList(urgentNotification, nonUrgentNotification);
-
-        // mock
-        doReturn(notifications).when(notificationMapper).mapEntitiesToModel(notificationEntities);
-
-        // execute
-        notificationService.saveAndIfUrgentThenPublish(notificationEntities);
-
-        // verify and assert
-        notificationEntities.forEach(notificationEntity -> verify(notificationRepository).save(notificationEntity));
-        verify(notificationRepository).flush();
-        verify(notificationMapper).mapEntitiesToModel(notificationEntities);
-        verify(notificationPublisher).publish(Arrays.asList(urgentNotification));
-        verifyNoMoreInteractions(notificationRepository, notificationPublisher, notificationMapper);
-    }
-
-    @Test
     public void markAsReadWhenSuccessAndReadIsUpdatedFromFalseToTrue() {
         // data set
         NotificationEntity notification = new NotificationEntity();

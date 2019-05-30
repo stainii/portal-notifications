@@ -32,7 +32,7 @@ public class EventService {
     public void receiveEvents(Collection<Event> events) {
         log.info("Received events: " + events);
 
-        publishNewNotifications(events);
+        saveNewNotifications(events);
         cancelEarlierNotifications(events);
     }
 
@@ -49,7 +49,7 @@ public class EventService {
         }
     }
 
-    private void publishNewNotifications(Collection<Event> events) {
+    private void saveNewNotifications(Collection<Event> events) {
         List<NotificationEntity> notifications = events.parallelStream()
             .flatMap(subscriptionService::fireOnActivationCondition)
             .map(notificationMapper::map)
@@ -58,7 +58,7 @@ public class EventService {
         if (notifications.isEmpty()) {
             log.info("Received events, but no activations were triggered.");
         } else {
-            notificationService.saveAndIfUrgentThenPublish(notifications);
+            notificationService.save(notifications);
         }
     }
 

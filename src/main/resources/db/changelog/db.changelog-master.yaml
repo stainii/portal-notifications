@@ -154,26 +154,10 @@ databaseChangeLog:
                     oldColumnName: urgency
                     newColumnName: publish_strategy
 
-              - update:
-                    tableName: notification
-                    columns:
-                        - column:
-                              name: publish_strategy
-                              value: PUBLISH_AT_SPECIFIC_DATE_TIME
-                    where: publish_strategy = 'PUBLISH_WITHIN_24_HOURS'
-
               - renameColumn:
                     tableName: subscription
                     oldColumnName: urgency
                     newColumnName: publish_strategy
-
-              - update:
-                    tableName: subscription
-                    columns:
-                        - column:
-                              name: publish_strategy
-                              value: PUBLISH_AT_SPECIFIC_DATE_TIME
-                    where: publish_strategy = 'PUBLISH_WITHIN_24_HOURS'
 
     - changeSet:
           id: 5
@@ -194,3 +178,13 @@ databaseChangeLog:
                         - column:
                               name: published
                               valueBoolean: true
+    - changeSet:
+          id: 6
+          author: Stijn Hooft
+          changes:
+              - addColumn:
+                    tableName: subscription
+                    columns:
+                        - column:
+                              name: mapping_of_schedule_date_time
+                              type: varchar(1000)

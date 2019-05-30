@@ -5,10 +5,13 @@ import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionMappingToNotificationEmbeddable;
+import be.stijnhooft.portal.notifications.mappers.publish_strategies.AbstractPublishStrategy;
 import be.stijnhooft.portal.notifications.model.Notification;
 import be.stijnhooft.portal.notifications.model.NotificationAction;
 import be.stijnhooft.portal.notifications.model.PublishStrategy;
+import com.netflix.discovery.converters.Auto;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -28,6 +31,9 @@ public class NotificationMapper {
     @Value("${baseUrl}")
     private String baseUrlOfThisDeployment;
 
+    @Autowired
+    private List<AbstractPublishStrategy> publishStrategies;
+
     public NotificationEntity map(@NonNull FiringSubscription firingSubscription) {
         Event event = firingSubscription.getEvent();
         SubscriptionMappingToNotificationEmbeddable mapping = firingSubscription.getSubscription().getMappingToNotification();
@@ -41,11 +47,8 @@ public class NotificationMapper {
             .getValue(context, String.class);
         String actionUrl = parser.parseExpression(mapping.ofActionUrl())
             .getValue(context, String.class);
-        String scheduleDateAsString = parser.parseExpression(mapping.ofScheduleDateTime())
-            .getValue(context, String.class);
         PublishStrategy publishStrategy = firingSubscription.getSubscription().getPublishStrategy();
-
-        LocalDateTime scheduleDate = determineScheduleDate(publishStrategy, scheduleDateAsString);
+        LocalDateTime scheduleDate = determineScheduleDate(firingSubscription);
 
         NotificationActionEmbeddable action = new NotificationActionEmbeddable(actionUrl, actionName);
         return new NotificationEntity(event.getSource(), event.getFlowId(), title, message, action, publishStrategy, event.getPublishDate(), scheduleDate);
@@ -63,14 +66,12 @@ public class NotificationMapper {
         return entities.stream().map(this::mapEntityToModel).collect(Collectors.toList());
     }
 
-
-    private LocalDateTime determineScheduleDate(PublishStrategy publishStrategy, String scheduleDateAsString) {
-        switch (publishStrategy) {
-            case PUBLISH_IMMEDIATELY: return LocalDateTime.now();
-            case PUBLISH_AT_SPECIFIC_DATE_TIME: return LocalDateTime.parse(scheduleDateAsString);
-            default: throw new UnsupportedOperationException("The schedule date cannot be determined for publishStrategy " + publishStrategy);
-        }
+    private LocalDateTime determineScheduleDate(FiringSubscription firingSubscription) {
+        return
+            publishStrategies.stream()
+            .filter(strategy -> strategy.implementedStrategy() == firingSubscription.getSubscription().getPublishStrategy())
+            .findFirst().orElseThrow(() -> new UnsupportedOperationException("The schedule date cannot be determined for publishStrategy " + firingSubscription.getSubscription().getPublishStrategy()))
+            .apply(firingSubscription);
     }
-
 
 }

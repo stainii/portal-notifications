@@ -62,6 +62,7 @@ public class NotificationEntity {
      **/
     @NonNull
     @Column(name = "scheduled_at")
+    @Setter
     private LocalDateTime scheduledAt;
 
     /**
