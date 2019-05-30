@@ -53,7 +53,7 @@ public class SubscriptionMappingToNotificationEmbeddable {
      **/
     @Getter
     @NonNull
-    private String mappingOfScheduleDate;
+    private String mappingOfScheduleDateTime;
 
     /**
      * Alternative to getter, to make code more concise. Meant to be used as: mapping.ofTitle();
@@ -84,10 +84,10 @@ public class SubscriptionMappingToNotificationEmbeddable {
     }
 
     /**
-     * Alternative to getter, to make code more concise. Meant to be used as: mapping.ofScheduleDate();
+     * Alternative to getter, to make code more concise. Meant to be used as: mapping.ofScheduleDateTime();
      **/
-    public String ofScheduleDate() {
-        return getMappingOfScheduleDate();
+    public String ofScheduleDateTime() {
+        return getMappingOfScheduleDateTime();
     }
 
 }

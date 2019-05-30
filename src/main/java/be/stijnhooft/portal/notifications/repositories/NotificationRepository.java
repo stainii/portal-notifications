@@ -21,11 +21,13 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
         "where n.cancelledAt is null " +
         "and n.published = false " +
         "and n.scheduledAt >= :scheduledAfter " +
-        "and n.scheduledAt < :scheduledBefore")
+        "and n.scheduledAt <= :scheduledBefore")
     List<NotificationEntity> findNotificationsThatShouldBePublishedBetween(LocalDateTime scheduledAfter, LocalDateTime scheduledBefore);
 
     @Modifying
     @Query("update NotificationEntity set cancelledAt = :publishDate where flowId = :flowId and createdAt < :publishDate")
     void cancelNotificationsWithFlowIdAndBefore(String flowId, LocalDateTime publishDate);
 
+    @Query("select max(n.scheduledAt) from NotificationEntity n where n.published = true")
+    LocalDateTime findLastPublishDate();
 }

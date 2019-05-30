@@ -32,8 +32,7 @@ public class PublishNotificationsTest {
     private NotificationMapper notificationMapper;
 
     private Clock clock = Clock.fixed(ZonedDateTime.of(2019, 5, 30, 12, 10, 0, 0, ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
-    private LocalDateTime nowAtZeroSeconds = LocalDateTime.of(2019, 5, 30, 12, 10, 0, 0);
-    private LocalDateTime nowPlusOneMinuteAtZeroSeconds = LocalDateTime.of(2019, 5, 30, 12, 11, 0, 0);
+    private LocalDateTime now = LocalDateTime.ofInstant(clock.instant(), ZoneId.systemDefault());
 
     @Before
     public void init() {
@@ -50,15 +49,19 @@ public class PublishNotificationsTest {
         List<NotificationEntity> notificationEntities = Arrays.asList(notificationEntity1, notificationEntity2);
         List<Notification> notifications = Arrays.asList(new Notification(), new Notification());
 
+        LocalDateTime lastPublishDate = LocalDateTime.of(2019, 5, 30, 12, 9, 2);
+
         //mock
-        doReturn(notificationEntities).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(nowAtZeroSeconds, nowPlusOneMinuteAtZeroSeconds);
+        doReturn(lastPublishDate).when(notificationRepository).findLastPublishDate();
+        doReturn(notificationEntities).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(lastPublishDate, now);
         doReturn(notifications).when(notificationMapper).mapEntitiesToModel(notificationEntities);
 
         //execute
         publishNotifications.publishNotifications();
 
         //verify
-        verify(notificationRepository).findNotificationsThatShouldBePublishedBetween(nowAtZeroSeconds, nowPlusOneMinuteAtZeroSeconds);
+        verify(notificationRepository).findLastPublishDate();
+        verify(notificationRepository).findNotificationsThatShouldBePublishedBetween(lastPublishDate, now);
         verify(notificationMapper).mapEntitiesToModel(notificationEntities);
         verify(notificationPublisher).publish(notifications);
         verifyNoMoreInteractions(notificationRepository, notificationPublisher, notificationMapper);
@@ -69,14 +72,47 @@ public class PublishNotificationsTest {
 
     @Test
     public void publishNotificationsWhenNoneExist() {
+        // data set
+        LocalDateTime lastPublishDate = LocalDateTime.of(2019, 5, 30, 12, 9, 2);
+
         //mock
-        doReturn(new ArrayList<>()).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(nowAtZeroSeconds, nowPlusOneMinuteAtZeroSeconds);
+        doReturn(lastPublishDate).when(notificationRepository).findLastPublishDate();
+        doReturn(new ArrayList<>()).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(lastPublishDate, now);
 
         //execute
         publishNotifications.publishNotifications();
 
         //verify
-        verify(notificationRepository).findNotificationsThatShouldBePublishedBetween(nowAtZeroSeconds, nowPlusOneMinuteAtZeroSeconds);
+        verify(notificationRepository).findLastPublishDate();
+        verify(notificationRepository).findNotificationsThatShouldBePublishedBetween(lastPublishDate, now);
         verifyNoMoreInteractions(notificationRepository, notificationPublisher, notificationMapper);
+    }
+
+    @Test
+    public void publishNotificationsWhenItsTheFirstTimeEverNotificationsAreBeingPublished() {
+        //data set
+        NotificationEntity notificationEntity1 = new NotificationEntity();
+        NotificationEntity notificationEntity2 = new NotificationEntity();
+
+        List<NotificationEntity> notificationEntities = Arrays.asList(notificationEntity1, notificationEntity2);
+        List<Notification> notifications = Arrays.asList(new Notification(), new Notification());
+
+        //mock
+        doReturn(null).when(notificationRepository).findLastPublishDate();
+        doReturn(notificationEntities).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(LocalDateTime.MIN, now);
+        doReturn(notifications).when(notificationMapper).mapEntitiesToModel(notificationEntities);
+
+        //execute
+        publishNotifications.publishNotifications();
+
+        //verify
+        verify(notificationRepository).findLastPublishDate();
+        verify(notificationRepository).findNotificationsThatShouldBePublishedBetween(LocalDateTime.MIN, now);
+        verify(notificationMapper).mapEntitiesToModel(notificationEntities);
+        verify(notificationPublisher).publish(notifications);
+        verifyNoMoreInteractions(notificationRepository, notificationPublisher, notificationMapper);
+
+        assertTrue(notificationEntity1.isPublished());
+        assertTrue(notificationEntity2.isPublished());
     }
 }

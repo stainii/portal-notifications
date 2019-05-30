@@ -41,7 +41,7 @@ public class NotificationMapper {
             .getValue(context, String.class);
         String actionUrl = parser.parseExpression(mapping.ofActionUrl())
             .getValue(context, String.class);
-        String scheduleDateAsString = parser.parseExpression(mapping.ofScheduleDate())
+        String scheduleDateAsString = parser.parseExpression(mapping.ofScheduleDateTime())
             .getValue(context, String.class);
         PublishStrategy publishStrategy = firingSubscription.getSubscription().getPublishStrategy();
 
