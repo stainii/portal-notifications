@@ -69,7 +69,7 @@ public class PublishNotifications {
         LocalDateTime lastPublishDate = notificationRepository.findLastPublishDate();
         if (lastPublishDate == null) {
             log.info("This could be the first time that notifications are published");
-            return LocalDateTime.MIN;
+            return LocalDateTime.of(2018, 1, 1, 0, 0);
         } else {
             log.info("Last time that notifications were published was " + lastPublishDate + ".");
             return lastPublishDate;
