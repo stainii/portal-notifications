@@ -10,7 +10,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.*;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -97,9 +100,11 @@ public class PublishNotificationsTest {
         List<NotificationEntity> notificationEntities = Arrays.asList(notificationEntity1, notificationEntity2);
         List<Notification> notifications = Arrays.asList(new Notification(), new Notification());
 
+        LocalDateTime minDate = LocalDateTime.of(2018, 1, 1, 0, 0);
+
         //mock
         doReturn(null).when(notificationRepository).findLastPublishDate();
-        doReturn(notificationEntities).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(LocalDateTime.MIN, now);
+        doReturn(notificationEntities).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(minDate, now);
         doReturn(notifications).when(notificationMapper).mapEntitiesToModel(notificationEntities);
 
         //execute
@@ -107,7 +112,7 @@ public class PublishNotificationsTest {
 
         //verify
         verify(notificationRepository).findLastPublishDate();
-        verify(notificationRepository).findNotificationsThatShouldBePublishedBetween(LocalDateTime.MIN, now);
+        verify(notificationRepository).findNotificationsThatShouldBePublishedBetween(minDate, now);
         verify(notificationMapper).mapEntitiesToModel(notificationEntities);
         verify(notificationPublisher).publish(notifications);
         verifyNoMoreInteractions(notificationRepository, notificationPublisher, notificationMapper);
