@@ -25,29 +25,29 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(classes = PortalNotifications.class)
 @ActiveProfiles("local")
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-  DirtiesContextTestExecutionListener.class,
-  TransactionalTestExecutionListener.class,
-  DbUnitTestExecutionListener.class})
+    DirtiesContextTestExecutionListener.class,
+    TransactionalTestExecutionListener.class,
+    DbUnitTestExecutionListener.class})
 public class SubscriptionRepositoryTest {
 
-  @Autowired
-  private SubscriptionRepository subscriptionRepository;
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
-  @Test
-  @DatabaseSetup("/datasets/SubscriptionRepositoryTest-findByOrigin-initial.xml")
-  @DatabaseTearDown("/datasets/clear.xml")
-  public void findByOrigin() {
-    List<SubscriptionEntity> subscriptions = subscriptionRepository.findByOrigin("test");
-    assertEquals(1, subscriptions.size());
-    assertEquals(Long.valueOf(1), subscriptions.get(0).getId());
-  }
+    @Test
+    @DatabaseSetup("/datasets/SubscriptionRepositoryTest-findByOrigin-initial.xml")
+    @DatabaseTearDown("/datasets/clear.xml")
+    public void findByOrigin() {
+        List<SubscriptionEntity> subscriptions = subscriptionRepository.findByOrigin("test");
+        assertEquals(1, subscriptions.size());
+        assertEquals(Long.valueOf(1), subscriptions.get(0).getId());
+    }
 
-  @Test
-  @DatabaseSetup("/datasets/SubscriptionRepositoryTest-findByOrigin-initial.xml")
-  @DatabaseTearDown("/datasets/clear.xml")
-  public void findByOriginWhenNothingFound() {
-    List<SubscriptionEntity> subscriptions = subscriptionRepository.findByOrigin("bla");
-    assertEquals(0, subscriptions.size());
-  }
+    @Test
+    @DatabaseSetup("/datasets/SubscriptionRepositoryTest-findByOrigin-initial.xml")
+    @DatabaseTearDown("/datasets/clear.xml")
+    public void findByOriginWhenNothingFound() {
+        List<SubscriptionEntity> subscriptions = subscriptionRepository.findByOrigin("bla");
+        assertEquals(0, subscriptions.size());
+    }
 
 }

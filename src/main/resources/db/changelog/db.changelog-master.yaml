@@ -123,3 +123,68 @@ databaseChangeLog:
                         - column:
                               name: cancellation_condition
                               type: varchar(1000)
+
+    - changeSet:
+          id: 3
+          author: Stijn Hooft
+          changes:
+              - renameColumn:
+                    tableName: notification
+                    oldColumnName: date
+                    newColumnName: created_at
+
+              - addColumn:
+                    tableName: notification
+                    columns:
+                        - column:
+                              name: scheduled_at
+                              type: timestamp
+              - sql:
+                    sql: update notification set scheduled_at = created_at
+
+              - addNotNullConstraint:
+                    tableName: notification
+                    columnName: scheduled_at
+    - changeSet:
+          id: 4
+          author: Stijn Hooft
+          changes:
+              - renameColumn:
+                    tableName: notification
+                    oldColumnName: urgency
+                    newColumnName: publish_strategy
+
+              - renameColumn:
+                    tableName: subscription
+                    oldColumnName: urgency
+                    newColumnName: publish_strategy
+
+    - changeSet:
+          id: 5
+          author: Stijn Hooft
+          changes:
+              - addColumn:
+                    tableName: notification
+                    columns:
+                        - column:
+                              name: published
+                              type: boolean
+                              defaultValueBoolean: false
+                              constraints:
+                                  nullable: false
+              - update:
+                    tableName: notification
+                    columns:
+                        - column:
+                              name: published
+                              valueBoolean: true
+    - changeSet:
+          id: 6
+          author: Stijn Hooft
+          changes:
+              - addColumn:
+                    tableName: subscription
+                    columns:
+                        - column:
+                              name: mapping_of_schedule_date_time
+                              type: varchar(1000)

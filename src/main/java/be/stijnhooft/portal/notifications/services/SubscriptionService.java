@@ -18,18 +18,20 @@ import java.util.stream.Stream;
 @Service
 public class SubscriptionService {
 
-    private final ExpressionParser parser = new SpelExpressionParser();
+    private final ExpressionParser parser;
     private final SubscriptionRepository subscriptionRepository;
 
     @Autowired
     public SubscriptionService(SubscriptionRepository subscriptionRepository) {
         this.subscriptionRepository = subscriptionRepository;
+        this.parser = new SpelExpressionParser();
     }
 
     /**
      * When a subscription exists for an event and it's activation condition is met,
      * a firing subscription is returned.
      * If none apply, an empty optional is returned.
+     *
      * @param event event
      * @return firing subscription or empty optional
      */
@@ -41,6 +43,7 @@ public class SubscriptionService {
      * When a subscription exists for an event and it's cancellation condition is met,
      * a firing subscription is returned.
      * If none apply, an empty optional is returned.
+     *
      * @param event event
      * @return firing subscription or empty optional
      */
@@ -59,9 +62,9 @@ public class SubscriptionService {
     private Stream<FiringSubscription> fireOnCondition(Event event, Function<SubscriptionEntity, String> condition) {
         StandardEvaluationContext context = new StandardEvaluationContext(event);
         return subscriptionRepository.findByOrigin(event.getSource())
-                .stream()
-                .filter(subscription -> parser.parseExpression(condition.apply(subscription)).getValue(context, Boolean.class))
-                .map(subscription -> new FiringSubscription(subscription, event));
+            .stream()
+            .filter(subscription -> parser.parseExpression(condition.apply(subscription)).getValue(context, Boolean.class))
+            .map(subscription -> new FiringSubscription(subscription, event));
     }
 
 }

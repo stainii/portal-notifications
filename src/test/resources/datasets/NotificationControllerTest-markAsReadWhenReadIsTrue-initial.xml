@@ -2,12 +2,14 @@
   <notification
     id="1"
     origin="Housagotchi"
-    date="2017-10-20 10:02:10"
+    created_at="2017-10-20 10:02:10"
+    scheduled_at="2017-10-20 10:02:10"
     title="Title 1"
     message="Message 1"
     action_url="http://www.stijnhooft.be"
     action_text="Open Housagotchi"
     read="false"
-    urgency="PUBLISH_IMMEDIATELY"
+    published="true"
+    publish_strategy="PUBLISH_IMMEDIATELY"
   />
 </dataset>

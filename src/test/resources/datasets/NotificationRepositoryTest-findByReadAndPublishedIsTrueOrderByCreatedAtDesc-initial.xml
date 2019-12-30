@@ -1,0 +1,126 @@
+<dataset>
+    <notification
+        id="1"
+        origin="Housagotchi"
+        created_at="2017-10-20 10:02:10"
+        scheduled_at="2017-10-20 10:02:10"
+        title="Title 1"
+        message="Message 1"
+        action_url="http://www.stijnhooft.be"
+        action_text="Open Housagotchi"
+        read="false"
+        published="true"
+        publish_strategy="PUBLISH_IMMEDIATELY"
+    />
+    <notification
+        id="2"
+        origin="Housagotchi"
+        created_at="2017-10-22 10:02:10"
+        scheduled_at="2017-10-22 10:02:10"
+        title="Title 2"
+        message="Message 2"
+        action_url="http://www.stijnhooft.be"
+        action_text="Open Housagotchi"
+        read="true"
+        published="true"
+        publish_strategy="PUBLISH_IMMEDIATELY"
+    />
+    <notification
+        id="3"
+        origin="Housagotchi"
+        created_at="2017-10-24 10:02:10"
+        scheduled_at="2017-10-24 10:02:10"
+        title="Title 3"
+        message="Message 3"
+        action_url="http://www.stijnhooft.be"
+        action_text="Open Housagotchi"
+        read="false"
+        published="true"
+        publish_strategy="PUBLISH_IMMEDIATELY"
+    />
+
+    <!-- should not be picked up because they are cancelled -->
+    <notification
+        id="4"
+        origin="Housagotchi"
+        created_at="2017-10-20 10:02:10"
+        scheduled_at="2017-10-20 10:02:10"
+        title="Title 1"
+        message="Message 1"
+        action_url="http://www.stijnhooft.be"
+        action_text="Open Housagotchi"
+        read="false"
+        published="true"
+        publish_strategy="PUBLISH_IMMEDIATELY"
+        cancelled_at="2017-10-20 11:02:10"
+    />
+    <notification
+        id="5"
+        origin="Housagotchi"
+        created_at="2017-10-22 10:02:10"
+        scheduled_at="2017-10-22 10:02:10"
+        title="Title 2"
+        message="Message 2"
+        action_url="http://www.stijnhooft.be"
+        action_text="Open Housagotchi"
+        read="true"
+        published="true"
+        publish_strategy="PUBLISH_IMMEDIATELY"
+        cancelled_at="2017-10-23 11:02:10"
+    />
+    <notification
+        id="6"
+        origin="Housagotchi"
+        created_at="2017-10-24 10:02:10"
+        scheduled_at="2017-10-24 10:02:10"
+        title="Title 3"
+        message="Message 3"
+        action_url="http://www.stijnhooft.be"
+        action_text="Open Housagotchi"
+        read="false"
+        published="true"
+        publish_strategy="PUBLISH_IMMEDIATELY"
+        cancelled_at="2017-10-25 11:02:10"
+    />
+
+    <!-- should not be picked up because they are not published yet -->
+    <notification
+        id="7"
+        origin="Housagotchi"
+        created_at="2017-10-20 10:02:10"
+        scheduled_at="2017-10-20 10:02:10"
+        title="Title 1"
+        message="Message 1"
+        action_url="http://www.stijnhooft.be"
+        action_text="Open Housagotchi"
+        read="false"
+        published="false"
+        publish_strategy="PUBLISH_IMMEDIATELY"
+    />
+    <notification
+        id="8"
+        origin="Housagotchi"
+        created_at="2017-10-22 10:02:10"
+        scheduled_at="2017-10-22 10:02:10"
+        title="Title 2"
+        message="Message 2"
+        action_url="http://www.stijnhooft.be"
+        action_text="Open Housagotchi"
+        read="true"
+        published="false"
+        publish_strategy="PUBLISH_IMMEDIATELY"
+    />
+    <notification
+        id="9"
+        origin="Housagotchi"
+        created_at="2017-10-24 10:02:10"
+        scheduled_at="2017-10-24 10:02:10"
+        title="Title 3"
+        message="Message 3"
+        action_url="http://www.stijnhooft.be"
+        action_text="Open Housagotchi"
+        read="false"
+        published="false"
+        publish_strategy="PUBLISH_IMMEDIATELY"
+    />
+</dataset>

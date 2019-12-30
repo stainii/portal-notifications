@@ -6,7 +6,7 @@ import be.stijnhooft.portal.notifications.exceptions.NotificationNotFoundExcepti
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
 import be.stijnhooft.portal.notifications.model.Notification;
-import be.stijnhooft.portal.notifications.model.NotificationUrgency;
+import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,33 +23,24 @@ import java.util.stream.Collectors;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final NotificationPublisher notificationPublisher;
     private final NotificationMapper notificationMapper;
 
     @Autowired
-    public NotificationService(NotificationRepository notificationRepository, NotificationPublisher notificationPublisher, NotificationMapper notificationMapper) {
+    public NotificationService(NotificationRepository notificationRepository, NotificationMapper notificationMapper) {
         this.notificationRepository = notificationRepository;
-        this.notificationPublisher = notificationPublisher;
         this.notificationMapper = notificationMapper;
     }
 
     public List<Notification> findByRead(boolean read) {
-        return map(notificationRepository.findByReadAndCancelledAtIsNullOrderByDateDesc(read));
+        return map(notificationRepository.findByReadAndCancelledAtIsNullAndPublishedIsTrueOrderByCreatedAtDesc(read));
     }
 
     public List<Notification> findAll() {
-        return map(notificationRepository.findAll());
+        return map(notificationRepository.findAllByPublishedIsTrueAndCancelledAtIsNullOrderByCreatedAtDesc());
     }
 
-    public Collection<Notification> saveAndIfUrgentThenPublish(Collection<NotificationEntity> notificationEntities) {
-        notificationEntities.forEach(notificationRepository::save);
-        notificationRepository.flush(); //flush, to make sure we know the ids of the entities, so that the public action can be generated
-
-        Collection<Notification> notifications = map(notificationEntities);
-        publishUrgentNotifications(notifications);
-        //the other, non-urgent notifications, will be published by a scheduled method
-
-        return notifications;
+    public void save(Collection<NotificationEntity> notificationEntities) {
+        notificationRepository.saveAll(notificationEntities);
     }
 
     public void cancelNotifications(List<Event> eventsThatCancelNotifications) {
@@ -66,13 +57,6 @@ public class NotificationService {
 
         notification.setRead(isRead);
         return map(notification);
-    }
-
-    private void publishUrgentNotifications(Collection<Notification> notifications) {
-        List<Notification> urgentNotifications = notifications.stream()
-            .filter(notification -> notification.getUrgency() == NotificationUrgency.PUBLISH_IMMEDIATELY)
-            .collect(Collectors.toList());
-        notificationPublisher.publish(urgentNotifications);
     }
 
     private Notification map(NotificationEntity notification) {

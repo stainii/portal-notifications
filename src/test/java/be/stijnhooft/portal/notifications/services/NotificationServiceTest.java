@@ -8,7 +8,7 @@ import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
 import be.stijnhooft.portal.notifications.model.Notification;
 import be.stijnhooft.portal.notifications.model.NotificationAction;
-import be.stijnhooft.portal.notifications.model.NotificationUrgency;
+import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,43 +40,6 @@ public class NotificationServiceTest {
 
     @Mock
     private NotificationMapper notificationMapper;
-
-    @Test
-    public void saveAndIfUrgentThenPublish() {
-        // data set
-        NotificationEntity urgentNotificationEntity = new NotificationEntity(null, "Housagotchi",
-            "flow1", LocalDateTime.now(), "urgent notification", "hurry up!",
-            new NotificationActionEmbeddable("url", "text"),
-            NotificationUrgency.PUBLISH_IMMEDIATELY, false, null);
-        NotificationEntity nonUrgentNotificationEntity = new NotificationEntity(null, "Housagotchi",
-            "flow2", LocalDateTime.now(), "non-urgent notification", "chill...",
-            new NotificationActionEmbeddable("url", "text"),
-            NotificationUrgency.PUBLISH_WITHIN_24_HOURS, false, null);
-        List<NotificationEntity> notificationEntities = Arrays.asList(urgentNotificationEntity, nonUrgentNotificationEntity);
-
-        Notification urgentNotification = new Notification(1L, "Housagotchi",
-            LocalDateTime.now(), "urgent notification", "hurry up!",
-            new NotificationAction("url", "text", "internalUrl"),
-            NotificationUrgency.PUBLISH_IMMEDIATELY);
-        Notification nonUrgentNotification = new Notification(2L, "Housagotchi",
-            LocalDateTime.now(), "non-urgent notification", "chill...",
-            new NotificationAction("url", "text", "internalUrl"),
-            NotificationUrgency.PUBLISH_WITHIN_24_HOURS);
-        List<Notification> notifications = Arrays.asList(urgentNotification, nonUrgentNotification);
-
-        // mock
-        doReturn(notifications).when(notificationMapper).mapEntitiesToModel(notificationEntities);
-
-        // execute
-        notificationService.saveAndIfUrgentThenPublish(notificationEntities);
-
-        // verify and assert
-        notificationEntities.forEach(notificationEntity -> verify(notificationRepository).save(notificationEntity));
-        verify(notificationRepository).flush();
-        verify(notificationMapper).mapEntitiesToModel(notificationEntities);
-        verify(notificationPublisher).publish(Arrays.asList(urgentNotification));
-        verifyNoMoreInteractions(notificationRepository, notificationPublisher, notificationMapper);
-    }
 
     @Test
     public void markAsReadWhenSuccessAndReadIsUpdatedFromFalseToTrue() {

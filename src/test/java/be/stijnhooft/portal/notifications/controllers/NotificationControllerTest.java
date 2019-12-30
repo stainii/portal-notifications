@@ -40,7 +40,7 @@ public class NotificationControllerTest {
     @Test
     @DatabaseSetup("/datasets/NotificationControllerTest-find-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
-    public void findWhenRequestingOnlyUnreadNotifications() throws Exception {
+    public void findWhenRequestingOnlyUnreadAndPublishedNotifications() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("http://localhost:2003/api/notification/")
             .param("onlyUnread", "true")
             .contentType(APPLICATION_JSON))
@@ -54,7 +54,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("$[0].message", is("Message 3")))
             .andExpect(jsonPath("$[0].action.url", is("https://please_overwrite/api/notification/3/action/url/")))
             .andExpect(jsonPath("$[0].action.text", is("Open Housagotchi")))
-            .andExpect(jsonPath("$[0].urgency", is("PUBLISH_IMMEDIATELY")))
+            .andExpect(jsonPath("$[0].publishStrategy", is("PUBLISH_IMMEDIATELY")))
 
             .andExpect(jsonPath("$[1].id", is(1)))
             .andExpect(jsonPath("$[1].origin", is("Housagotchi")))
@@ -63,7 +63,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("$[1].message", is("Message 1")))
             .andExpect(jsonPath("$[1].action.url", is("https://please_overwrite/api/notification/1/action/url/")))
             .andExpect(jsonPath("$[1].action.text", is("Open Housagotchi")))
-            .andExpect(jsonPath("$[1].urgency", is("PUBLISH_IMMEDIATELY")));
+            .andExpect(jsonPath("$[1].publishStrategy", is("PUBLISH_IMMEDIATELY")));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("$[0].message", is("Message 2")))
             .andExpect(jsonPath("$[0].action.url", is("https://please_overwrite/api/notification/2/action/url/")))
             .andExpect(jsonPath("$[0].action.text", is("Open Housagotchi")))
-            .andExpect(jsonPath("$[0].urgency", is("PUBLISH_IMMEDIATELY")));
+            .andExpect(jsonPath("$[0].publishStrategy", is("PUBLISH_IMMEDIATELY")));
     }
 
     @Test
@@ -95,15 +95,14 @@ public class NotificationControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(3)))
 
-            .andExpect(jsonPath("$[2].id", is(3)))
-            .andExpect(jsonPath("$[2].origin", is("Housagotchi")))
-            .andExpect(jsonPath("$[2].date", is("2017-10-24T10:02:10")))
-            .andExpect(jsonPath("$[2].title", is("Title 3")))
-            .andExpect(jsonPath("$[2].message", is("Message 3")))
-            .andExpect(jsonPath("$[2].action.url", is("https://please_overwrite/api/notification/3/action/url/")))
-            .andExpect(jsonPath("$[2].action.text", is("Open Housagotchi")))
-            .andExpect(jsonPath("$[2].urgency", is("PUBLISH_IMMEDIATELY")))
-
+            .andExpect(jsonPath("$[0].id", is(3)))
+            .andExpect(jsonPath("$[0].origin", is("Housagotchi")))
+            .andExpect(jsonPath("$[0].date", is("2017-10-24T10:02:10")))
+            .andExpect(jsonPath("$[0].title", is("Title 3")))
+            .andExpect(jsonPath("$[0].message", is("Message 3")))
+            .andExpect(jsonPath("$[0].action.url", is("https://please_overwrite/api/notification/3/action/url/")))
+            .andExpect(jsonPath("$[0].action.text", is("Open Housagotchi")))
+            .andExpect(jsonPath("$[0].publishStrategy", is("PUBLISH_IMMEDIATELY")))
 
             .andExpect(jsonPath("$[1].id", is(2)))
             .andExpect(jsonPath("$[1].origin", is("Housagotchi")))
@@ -112,16 +111,16 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("$[1].message", is("Message 2")))
             .andExpect(jsonPath("$[1].action.url", is("https://please_overwrite/api/notification/2/action/url/")))
             .andExpect(jsonPath("$[1].action.text", is("Open Housagotchi")))
-            .andExpect(jsonPath("$[1].urgency", is("PUBLISH_IMMEDIATELY")))
+            .andExpect(jsonPath("$[1].publishStrategy", is("PUBLISH_IMMEDIATELY")))
 
-            .andExpect(jsonPath("$[0].id", is(1)))
-            .andExpect(jsonPath("$[0].origin", is("Housagotchi")))
-            .andExpect(jsonPath("$[0].date", is("2017-10-20T10:02:10")))
-            .andExpect(jsonPath("$[0].title", is("Title 1")))
-            .andExpect(jsonPath("$[0].message", is("Message 1")))
-            .andExpect(jsonPath("$[0].action.url", is("https://please_overwrite/api/notification/1/action/url/")))
-            .andExpect(jsonPath("$[0].action.text", is("Open Housagotchi")))
-            .andExpect(jsonPath("$[0].urgency", is("PUBLISH_IMMEDIATELY")));
+            .andExpect(jsonPath("$[2].id", is(1)))
+            .andExpect(jsonPath("$[2].origin", is("Housagotchi")))
+            .andExpect(jsonPath("$[2].date", is("2017-10-20T10:02:10")))
+            .andExpect(jsonPath("$[2].title", is("Title 1")))
+            .andExpect(jsonPath("$[2].message", is("Message 1")))
+            .andExpect(jsonPath("$[2].action.url", is("https://please_overwrite/api/notification/1/action/url/")))
+            .andExpect(jsonPath("$[2].action.text", is("Open Housagotchi")))
+            .andExpect(jsonPath("$[2].publishStrategy", is("PUBLISH_IMMEDIATELY")));
     }
 
     @Test
@@ -143,7 +142,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("message", is("Message 1")))
             .andExpect(jsonPath("action.url", is("https://please_overwrite/api/notification/1/action/url/")))
             .andExpect(jsonPath("action.text", is("Open Housagotchi")))
-            .andExpect(jsonPath("urgency", is("PUBLISH_IMMEDIATELY")));
+            .andExpect(jsonPath("publishStrategy", is("PUBLISH_IMMEDIATELY")));
     }
 
     @Test
@@ -165,7 +164,7 @@ public class NotificationControllerTest {
             .andExpect(jsonPath("message", is("Message 1")))
             .andExpect(jsonPath("action.url", is("https://please_overwrite/api/notification/1/action/url/")))
             .andExpect(jsonPath("action.text", is("Open Housagotchi")))
-            .andExpect(jsonPath("urgency", is("PUBLISH_IMMEDIATELY")));
+            .andExpect(jsonPath("publishStrategy", is("PUBLISH_IMMEDIATELY")));
     }
 
     @Test
