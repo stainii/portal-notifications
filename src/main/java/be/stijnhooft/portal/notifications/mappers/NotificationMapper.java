@@ -9,8 +9,8 @@ import be.stijnhooft.portal.notifications.mappers.publish_strategies.AbstractPub
 import be.stijnhooft.portal.notifications.model.Notification;
 import be.stijnhooft.portal.notifications.model.NotificationAction;
 import be.stijnhooft.portal.notifications.model.PublishStrategy;
-import com.netflix.discovery.converters.Auto;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.expression.ExpressionParser;
@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class NotificationMapper {
 
@@ -49,6 +50,8 @@ public class NotificationMapper {
             .getValue(context, String.class);
         PublishStrategy publishStrategy = firingSubscription.getSubscription().getPublishStrategy();
         LocalDateTime scheduleDate = determineScheduleDate(firingSubscription);
+
+        log.info("A notification for {} will fire at {}", firingSubscription.getEvent(), scheduleDate);
 
         NotificationActionEmbeddable action = new NotificationActionEmbeddable(actionUrl, actionName);
         return new NotificationEntity(event.getSource(), event.getFlowId(), title, message, action, publishStrategy, event.getPublishDate(), scheduleDate);
