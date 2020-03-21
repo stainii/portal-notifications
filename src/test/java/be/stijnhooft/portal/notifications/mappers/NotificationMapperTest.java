@@ -1,6 +1,7 @@
 package be.stijnhooft.portal.notifications.mappers;
 
 import be.stijnhooft.portal.model.domain.Event;
+import be.stijnhooft.portal.model.domain.FlowAction;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
@@ -18,7 +19,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-import static be.stijnhooft.portal.notifications.model.PublishStrategy.*;
+import static be.stijnhooft.portal.notifications.model.PublishStrategy.PUBLISH_AT_SPECIFIC_DATE_TIME;
+import static be.stijnhooft.portal.notifications.model.PublishStrategy.PUBLISH_IMMEDIATELY;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -48,7 +50,7 @@ public class NotificationMapperTest {
         data.put("url", "http://housagotchi");
 
         LocalDateTime publishDate = LocalDateTime.now();
-        Event event = new Event("Housagotchi", flowId, publishDate, data);
+        Event event = new Event("Housagotchi", flowId, FlowAction.START, publishDate, data);
 
         //execute
         NotificationEntity result = notificationMapper.map(new FiringSubscription(subscription, event));
@@ -87,7 +89,7 @@ public class NotificationMapperTest {
         data.put("url", "http://housagotchi");
 
         LocalDateTime publishDate = LocalDateTime.now();
-        Event event = new Event("Housagotchi", flowId, publishDate, data);
+        Event event = new Event("Housagotchi", flowId, FlowAction.START, publishDate, data);
 
         //execute
         NotificationEntity result = notificationMapper.map(new FiringSubscription(subscription, event));
