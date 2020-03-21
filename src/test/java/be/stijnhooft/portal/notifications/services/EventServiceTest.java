@@ -1,6 +1,7 @@
 package be.stijnhooft.portal.notifications.services;
 
 import be.stijnhooft.portal.model.domain.Event;
+import be.stijnhooft.portal.model.domain.FlowAction;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
@@ -38,9 +39,9 @@ public class EventServiceTest {
     @Test
     public void receiveEventsWithOnlyActivationEvents() {
         //data set
-        Event event1 = new Event("source1", "flow1", LocalDateTime.now(), new HashMap<>());
-        Event event2 = new Event("source2", "flow2", LocalDateTime.now(), new HashMap<>());
-        Event event3 = new Event("source3", "flow3", LocalDateTime.now(), new HashMap<>());
+        Event event1 = new Event("source1", "flow1", FlowAction.START, LocalDateTime.now(), new HashMap<>());
+        Event event2 = new Event("source2", "flow2", FlowAction.START, LocalDateTime.now(), new HashMap<>());
+        Event event3 = new Event("source3", "flow3", FlowAction.START, LocalDateTime.now(), new HashMap<>());
 
         FiringSubscription firingSubscription1 = new FiringSubscription(new SubscriptionEntity(), event1);
         FiringSubscription firingSubscription2 = new FiringSubscription(new SubscriptionEntity(), event3);
@@ -83,9 +84,9 @@ public class EventServiceTest {
     @Test
     public void receiveEventsWithOnlyCancellationEvents() {
         //data set
-        Event event1 = new Event("source1", "flow1", LocalDateTime.now(), new HashMap<>());
-        Event event2 = new Event("source2", "flow2", LocalDateTime.now(), new HashMap<>());
-        Event event3 = new Event("source3", "flow3", LocalDateTime.now(), new HashMap<>());
+        Event event1 = new Event("source1", "flow1", FlowAction.END, LocalDateTime.now(), new HashMap<>());
+        Event event2 = new Event("source2", "flow2", FlowAction.END, LocalDateTime.now(), new HashMap<>());
+        Event event3 = new Event("source3", "flow3", FlowAction.END, LocalDateTime.now(), new HashMap<>());
 
         FiringSubscription firingSubscription1 = new FiringSubscription(new SubscriptionEntity(), event1);
         FiringSubscription firingSubscription2 = new FiringSubscription(new SubscriptionEntity(), event3);
@@ -125,9 +126,9 @@ public class EventServiceTest {
     @Test
     public void receiveEventsWithAllEvents() {
         //data set
-        Event event1 = new Event("source1", "flow1", LocalDateTime.now(), new HashMap<>());
-        Event event2 = new Event("source2", "flow2", LocalDateTime.now(), new HashMap<>());
-        Event event3 = new Event("source3", "flow3", LocalDateTime.now(), new HashMap<>());
+        Event event1 = new Event("source1", "flow1", FlowAction.START, LocalDateTime.now(), new HashMap<>());
+        Event event2 = new Event("source2", "flow2", FlowAction.UPDATE, LocalDateTime.now(), new HashMap<>());
+        Event event3 = new Event("source3", "flow3", FlowAction.END, LocalDateTime.now(), new HashMap<>());
 
         FiringSubscription firingSubscription1 = new FiringSubscription(new SubscriptionEntity(), event1);
         FiringSubscription firingSubscription2 = new FiringSubscription(new SubscriptionEntity(), event3);
@@ -169,9 +170,9 @@ public class EventServiceTest {
     @Test
     public void receiveEventsButNothingShouldFire() {
         //data set
-        Event event1 = new Event("source1", "flow1", LocalDateTime.now(), new HashMap<>());
-        Event event2 = new Event("source2", "flow2", LocalDateTime.now(), new HashMap<>());
-        Event event3 = new Event("source3", "flow3", LocalDateTime.now(), new HashMap<>());
+        Event event1 = new Event("source1", "flow1", FlowAction.UPDATE, LocalDateTime.now(), new HashMap<>());
+        Event event2 = new Event("source2", "flow2", FlowAction.UPDATE, LocalDateTime.now(), new HashMap<>());
+        Event event3 = new Event("source3", "flow3", FlowAction.UPDATE, LocalDateTime.now(), new HashMap<>());
 
         //mock
         doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event1);

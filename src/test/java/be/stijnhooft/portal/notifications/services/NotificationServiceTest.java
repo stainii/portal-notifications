@@ -1,14 +1,11 @@
 package be.stijnhooft.portal.notifications.services;
 
 import be.stijnhooft.portal.model.domain.Event;
-import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
+import be.stijnhooft.portal.model.domain.FlowAction;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.exceptions.NotificationNotFoundException;
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
-import be.stijnhooft.portal.notifications.model.Notification;
-import be.stijnhooft.portal.notifications.model.NotificationAction;
-import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -142,8 +139,8 @@ public class NotificationServiceTest {
     @Test
     public void cancelNotifications() {
         // data set
-        Event event1 = new Event("Housagotchi", "abc", LocalDateTime.now().minusHours(1), new HashMap<>());
-        Event event2 = new Event("Housagotchi", "def", LocalDateTime.now().minusHours(2), new HashMap<>());
+        Event event1 = new Event("Housagotchi", "abc", FlowAction.END, LocalDateTime.now().minusHours(1), new HashMap<>());
+        Event event2 = new Event("Housagotchi", "def", FlowAction.END, LocalDateTime.now().minusHours(2), new HashMap<>());
         List<Event> events = Arrays.asList(event1, event2);
 
         // execute

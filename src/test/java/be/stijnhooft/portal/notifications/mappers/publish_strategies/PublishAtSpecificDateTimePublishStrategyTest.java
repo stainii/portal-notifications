@@ -1,6 +1,7 @@
 package be.stijnhooft.portal.notifications.mappers.publish_strategies;
 
 import be.stijnhooft.portal.model.domain.Event;
+import be.stijnhooft.portal.model.domain.FlowAction;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionMappingToNotificationEmbeddable;
@@ -33,7 +34,7 @@ public class PublishAtSpecificDateTimePublishStrategyTest {
         data.put("dueDate", "2019-10-11T09:30:00");
 
         LocalDateTime publishDate = LocalDateTime.now();
-        Event event = new Event("Housagotchi", "flowId", publishDate, data);
+        Event event = new Event("Housagotchi", "flowId", FlowAction.START, publishDate, data);
 
         //execute
         LocalDateTime result = strategy.apply(new FiringSubscription(subscription, event));
@@ -53,7 +54,7 @@ public class PublishAtSpecificDateTimePublishStrategyTest {
         data.put("dueDate", "2019-10-11T09:30:00");
 
         LocalDateTime publishDate = LocalDateTime.now();
-        Event event = new Event("Housagotchi", "flowId", publishDate, data);
+        Event event = new Event("Housagotchi", "flowId", FlowAction.START, publishDate, data);
 
         //execute
         strategy.apply(new FiringSubscription(subscription, event));
@@ -70,7 +71,7 @@ public class PublishAtSpecificDateTimePublishStrategyTest {
         data.put("dueDate", "2019-10-11T09:30:00");
 
         LocalDateTime publishDate = LocalDateTime.now();
-        Event event = new Event("Housagotchi", "flowId", publishDate, data);
+        Event event = new Event("Housagotchi", "flowId", FlowAction.START, publishDate, data);
 
         //execute
         strategy.apply(new FiringSubscription(subscription, event));

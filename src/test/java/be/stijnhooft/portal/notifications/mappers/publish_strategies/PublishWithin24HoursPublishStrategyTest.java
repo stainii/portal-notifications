@@ -1,6 +1,7 @@
 package be.stijnhooft.portal.notifications.mappers.publish_strategies;
 
 import be.stijnhooft.portal.model.domain.Event;
+import be.stijnhooft.portal.model.domain.FlowAction;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
@@ -38,7 +39,7 @@ public class PublishWithin24HoursPublishStrategyTest {
         SubscriptionEntity subscription = new SubscriptionEntity(1L, "Housagotchi", "true", "false", mapping, PUBLISH_WITHIN_24_HOURS);
         HashMap<String, String> data = new HashMap<>();
         LocalDateTime publishDate = LocalDateTime.now();
-        Event event = new Event("Housagotchi", "flowId", publishDate, data);
+        Event event = new Event("Housagotchi", "flowId", FlowAction.START, publishDate, data);
 
         LocalDateTime expected = LocalDateTime.of(2019, 5, 30, 14, 0);
         LocalDateTime now = LocalDateTime.of(2019, 5, 30, 12, 10, 12);
@@ -75,7 +76,7 @@ public class PublishWithin24HoursPublishStrategyTest {
         LocalDateTime tomorrow = LocalDateTime.of(2019, 5, 31, 12, 10, 12);
         Clock clock = Clock.fixed(ZonedDateTime.of(2019, 5, 30, 12, 10, 12, 0, ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
 
-        Event event = new Event("Housagotchi", "flowId", publishDate, data);
+        Event event = new Event("Housagotchi", "flowId", FlowAction.START, publishDate, data);
 
         strategy = new PublishWithin24HoursPublishStrategy(notificationRepository, clock);
 
@@ -104,7 +105,7 @@ public class PublishWithin24HoursPublishStrategyTest {
         LocalDateTime tomorrow = LocalDateTime.of(2019, 5, 31, 16, 10, 12);
         Clock clock = Clock.fixed(ZonedDateTime.of(2019, 5, 30, 16, 10, 12, 0, ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
 
-        Event event = new Event("Housagotchi", "flowId", publishDate, data);
+        Event event = new Event("Housagotchi", "flowId", FlowAction.START, publishDate, data);
 
         strategy = new PublishWithin24HoursPublishStrategy(notificationRepository, clock);
 
