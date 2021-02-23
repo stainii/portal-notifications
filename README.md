@@ -3,7 +3,7 @@
 
 A module for my personal portal, which **listens to events from other modules, and turns them into notifications**.
 
-These notifications can be delivered to the user by so called *notification-plugins*. 
+These notifications are published to **notification topic**. Listeners to this topic, like portal-email, can turn these messages into emails. 
 
 With the front-end, it's possible to *subscribe to events*, and to *define how to transform these into notifications*.
 
@@ -41,17 +41,17 @@ Therefore, make sure you have the following config in your Maven `settings.xml`;
 
 ````$xml
 <servers>
-		<server>
-			<id>docker.io</id>
-			<username>your_username</username>
-			<password>*************</password>
-		</server>
-		<server>
-			<id>portal-nexus-releases</id>
-			<username>your_username</username>
-            <password>*************</password>
-		</server>
-	</servers>
+    <server>
+        <id>docker.io</id>
+        <username>your_username</username>
+        <password>*************</password>
+    </server>
+    <server>
+        <id>portal-nexus-releases</id>
+        <username>your_username</username>
+        <password>*************</password>
+    </server>
+</servers>
 ````
 * docker.io points to the Docker Hub.
 * portal-nexus-releases points to my personal Nexus (see `<distributionManagement>` in the project's `pom.xml`)
