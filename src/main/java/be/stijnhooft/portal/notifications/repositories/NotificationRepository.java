@@ -1,7 +1,6 @@
 package be.stijnhooft.portal.notifications.repositories;
 
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
-import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

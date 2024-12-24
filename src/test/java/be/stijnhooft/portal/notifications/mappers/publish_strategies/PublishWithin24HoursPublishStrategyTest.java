@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static be.stijnhooft.portal.notifications.model.PublishStrategy.PUBLISH_WITHIN_24_HOURS;
+import static be.stijnhooft.portal.model.notification.PublishStrategy.PUBLISH_WITHIN_24_HOURS;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 

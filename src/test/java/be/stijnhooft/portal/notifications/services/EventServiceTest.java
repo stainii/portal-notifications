@@ -2,12 +2,12 @@ package be.stijnhooft.portal.notifications.services;
 
 import be.stijnhooft.portal.model.domain.Event;
 import be.stijnhooft.portal.model.domain.FlowAction;
+import be.stijnhooft.portal.model.notification.PublishStrategy;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
-import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

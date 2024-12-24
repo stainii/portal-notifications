@@ -1,14 +1,14 @@
 package be.stijnhooft.portal.notifications.mappers;
 
 import be.stijnhooft.portal.model.domain.Event;
+import be.stijnhooft.portal.model.notification.Notification;
+import be.stijnhooft.portal.model.notification.NotificationAction;
+import be.stijnhooft.portal.model.notification.PublishStrategy;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionMappingToNotificationEmbeddable;
 import be.stijnhooft.portal.notifications.mappers.publish_strategies.AbstractPublishStrategy;
-import be.stijnhooft.portal.notifications.model.Notification;
-import be.stijnhooft.portal.notifications.model.NotificationAction;
-import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class NotificationMapper {
         return new NotificationEntity(event.getSource(), event.getFlowId(), title, message, action, publishStrategy, event.getPublishDate(), scheduleDate);
     }
 
-    public be.stijnhooft.portal.notifications.model.Notification mapEntityToModel(@NonNull NotificationEntity entity) {
+    public be.stijnhooft.portal.model.notification.Notification mapEntityToModel(@NonNull NotificationEntity entity) {
         NotificationAction action =
             new NotificationAction(baseUrlOfThisDeployment + "api/notification/" + entity.getId() + "/action/url/", entity.getAction().getText(), entity.getAction().getInternalUrl());
 

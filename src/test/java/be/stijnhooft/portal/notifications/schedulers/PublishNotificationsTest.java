@@ -1,9 +1,9 @@
 package be.stijnhooft.portal.notifications.schedulers;
 
+import be.stijnhooft.portal.model.notification.Notification;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
-import be.stijnhooft.portal.notifications.model.Notification;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import org.junit.Before;
 import org.junit.Test;

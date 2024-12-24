@@ -1,8 +1,8 @@
 package be.stijnhooft.portal.notifications.mappers.publish_strategies;
 
+import be.stijnhooft.portal.model.notification.PublishStrategy;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
-import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import be.stijnhooft.portal.notifications.utils.DateUtils;
 import lombok.NonNull;

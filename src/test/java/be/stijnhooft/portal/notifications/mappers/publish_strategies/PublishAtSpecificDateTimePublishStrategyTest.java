@@ -13,7 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-import static be.stijnhooft.portal.notifications.model.PublishStrategy.PUBLISH_AT_SPECIFIC_DATE_TIME;
+import static be.stijnhooft.portal.model.notification.PublishStrategy.PUBLISH_AT_SPECIFIC_DATE_TIME;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)

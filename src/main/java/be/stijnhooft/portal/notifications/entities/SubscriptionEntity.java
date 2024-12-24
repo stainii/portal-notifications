@@ -1,6 +1,6 @@
 package be.stijnhooft.portal.notifications.entities;
 
-import be.stijnhooft.portal.notifications.model.PublishStrategy;
+import be.stijnhooft.portal.model.notification.PublishStrategy;
 import lombok.*;
 
 import javax.persistence.*;

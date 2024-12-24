@@ -1,8 +1,8 @@
 package be.stijnhooft.portal.notifications.controllers;
 
+import be.stijnhooft.portal.model.notification.Notification;
 import be.stijnhooft.portal.notifications.dtos.NotificationReadStatus;
 import be.stijnhooft.portal.notifications.exceptions.NotificationNotFoundException;
-import be.stijnhooft.portal.notifications.model.Notification;
 import be.stijnhooft.portal.notifications.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

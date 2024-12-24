@@ -1,12 +1,10 @@
 package be.stijnhooft.portal.notifications.services;
 
 import be.stijnhooft.portal.model.domain.Event;
+import be.stijnhooft.portal.model.notification.Notification;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.exceptions.NotificationNotFoundException;
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
-import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
-import be.stijnhooft.portal.notifications.model.Notification;
-import be.stijnhooft.portal.notifications.model.PublishStrategy;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
