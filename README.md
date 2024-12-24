@@ -7,6 +7,14 @@ These notifications are published to **notification topic**. Listeners to this t
 
 With the front-end, it's possible to *subscribe to events*, and to *define how to transform these into notifications*.
 
+## Running locally
+1. Start the resources via Docker compose.
+```shell
+docker-compose % docker compose -f notifications-resources.yml -f core-resources.yml up
+```
+
+2. Start PortalNotifications in your favorite IDE.
+
 ## Config in the Spring cloud config server
 This module needs to fetch config from the Spring cloud config server.
 
