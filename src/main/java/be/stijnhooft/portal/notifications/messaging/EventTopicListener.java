@@ -2,7 +2,6 @@ package be.stijnhooft.portal.notifications.messaging;
 
 import be.stijnhooft.portal.model.domain.Event;
 import be.stijnhooft.portal.notifications.services.EventService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,6 @@ public class EventTopicListener {
 
     private final EventService eventService;
 
-    @Autowired
     public EventTopicListener(EventService eventService) {
         this.eventService = eventService;
     }

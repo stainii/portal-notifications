@@ -5,7 +5,6 @@ import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,6 @@ public class EventService {
     private final NotificationMapper notificationMapper;
     private final NotificationService notificationService;
 
-    @Autowired
     public EventService(SubscriptionService subscriptionService, NotificationMapper notificationMapper, NotificationService notificationService) {
         this.subscriptionService = subscriptionService;
         this.notificationMapper = notificationMapper;

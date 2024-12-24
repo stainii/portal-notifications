@@ -6,7 +6,6 @@ import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -29,7 +28,6 @@ public class PublishNotifications {
     private final NotificationMapper notificationMapper;
     private final Clock clock;
 
-    @Autowired
     public PublishNotifications(NotificationRepository notificationRepository,
                                 NotificationPublisher notificationPublisher,
                                 NotificationMapper notificationMapper,

@@ -4,7 +4,6 @@ import be.stijnhooft.portal.model.notification.Notification;
 import be.stijnhooft.portal.notifications.dtos.NotificationReadStatus;
 import be.stijnhooft.portal.notifications.exceptions.NotificationNotFoundException;
 import be.stijnhooft.portal.notifications.services.NotificationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @Autowired
     public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
@@ -33,8 +31,8 @@ public class NotificationController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/{id}/read")
-    public ResponseEntity<Notification> markAsRead(@PathVariable("id") Long id, @RequestBody NotificationReadStatus readStatus) {
+    @PutMapping("/{id}/read")
+    public ResponseEntity<Notification> markAsRead(@PathVariable Long id, @RequestBody NotificationReadStatus readStatus) {
         if (id.longValue() != readStatus.getId().longValue()) {
             throw new IllegalArgumentException("The id in the url (" + id + ") is not the same as the id in the payload (" + readStatus.getId() + ")");
         }
@@ -54,8 +52,8 @@ public class NotificationController {
      * By going to this REST method, the notification will be marked as read,
      * before redirecting the user to the actual url.
      */
-    @RequestMapping(method = RequestMethod.GET, path = "/{id}/action/url")
-    public void markAsReadAndRedirectToActionUrl(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
+    @GetMapping("/{id}/action/url")
+    public void markAsReadAndRedirectToActionUrl(@PathVariable Long id, HttpServletResponse response) throws IOException {
         try {
             Notification notification = notificationService.markAsRead(id, true);
             response.sendRedirect(notification.getAction().getInternalUrl());
