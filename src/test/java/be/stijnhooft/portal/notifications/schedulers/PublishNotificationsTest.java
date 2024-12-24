@@ -5,8 +5,8 @@ import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class PublishNotificationsTest {
@@ -37,7 +37,7 @@ public class PublishNotificationsTest {
     private Clock clock = Clock.fixed(ZonedDateTime.of(2019, 5, 30, 12, 10, 0, 0, ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
     private LocalDateTime now = LocalDateTime.ofInstant(clock.instant(), ZoneId.systemDefault());
 
-    @Before
+    @BeforeEach
     public void init() {
         MockitoAnnotations.initMocks(this);
         publishNotifications = new PublishNotifications(notificationRepository, notificationPublisher, notificationMapper, clock);

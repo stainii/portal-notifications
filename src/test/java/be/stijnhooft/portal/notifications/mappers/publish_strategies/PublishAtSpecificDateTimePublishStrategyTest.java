@@ -5,18 +5,19 @@ import be.stijnhooft.portal.model.domain.FlowAction;
 import be.stijnhooft.portal.notifications.dtos.FiringSubscription;
 import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionMappingToNotificationEmbeddable;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import static be.stijnhooft.portal.model.notification.PublishStrategy.PUBLISH_AT_SPECIFIC_DATE_TIME;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PublishAtSpecificDateTimePublishStrategyTest {
 
     @InjectMocks
@@ -43,38 +44,42 @@ public class PublishAtSpecificDateTimePublishStrategyTest {
         assertEquals(LocalDateTime.of(2019, 10, 11, 9, 30), result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void applyWhenMappingOfScheduleDateIsNotProvided() {
-        //data set
-        SubscriptionMappingToNotificationEmbeddable mapping = new SubscriptionMappingToNotificationEmbeddable("", "", "", "",  null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            //data set
+            SubscriptionMappingToNotificationEmbeddable mapping = new SubscriptionMappingToNotificationEmbeddable("", "", "", "", null);
 
-        SubscriptionEntity subscription = new SubscriptionEntity(1L, "Housagotchi", "true", "false", mapping, PUBLISH_AT_SPECIFIC_DATE_TIME);
+            SubscriptionEntity subscription = new SubscriptionEntity(1L, "Housagotchi", "true", "false", mapping, PUBLISH_AT_SPECIFIC_DATE_TIME);
 
-        HashMap<String, String> data = new HashMap<>();
-        data.put("dueDate", "2019-10-11T09:30:00");
+            HashMap<String, String> data = new HashMap<>();
+            data.put("dueDate", "2019-10-11T09:30:00");
 
-        LocalDateTime publishDate = LocalDateTime.now();
-        Event event = new Event("Housagotchi", "flowId", FlowAction.START, publishDate, data);
+            LocalDateTime publishDate = LocalDateTime.now();
+            Event event = new Event("Housagotchi", "flowId", FlowAction.START, publishDate, data);
 
-        //execute
-        strategy.apply(new FiringSubscription(subscription, event));
+            //execute
+            strategy.apply(new FiringSubscription(subscription, event));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void applyWhenMappingOfScheduleDateIsEmpty() {
-        //data set
-        SubscriptionMappingToNotificationEmbeddable mapping = new SubscriptionMappingToNotificationEmbeddable("", "", "", "",  "");
+        assertThrows(IllegalArgumentException.class, () -> {
+            //data set
+            SubscriptionMappingToNotificationEmbeddable mapping = new SubscriptionMappingToNotificationEmbeddable("", "", "", "", "");
 
-        SubscriptionEntity subscription = new SubscriptionEntity(1L, "Housagotchi", "true", "false", mapping, PUBLISH_AT_SPECIFIC_DATE_TIME);
+            SubscriptionEntity subscription = new SubscriptionEntity(1L, "Housagotchi", "true", "false", mapping, PUBLISH_AT_SPECIFIC_DATE_TIME);
 
-        HashMap<String, String> data = new HashMap<>();
-        data.put("dueDate", "2019-10-11T09:30:00");
+            HashMap<String, String> data = new HashMap<>();
+            data.put("dueDate", "2019-10-11T09:30:00");
 
-        LocalDateTime publishDate = LocalDateTime.now();
-        Event event = new Event("Housagotchi", "flowId", FlowAction.START, publishDate, data);
+            LocalDateTime publishDate = LocalDateTime.now();
+            Event event = new Event("Housagotchi", "flowId", FlowAction.START, publishDate, data);
 
-        //execute
-        strategy.apply(new FiringSubscription(subscription, event));
+            //execute
+            strategy.apply(new FiringSubscription(subscription, event));
+        });
     }
 
 }

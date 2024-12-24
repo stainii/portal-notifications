@@ -8,11 +8,11 @@ import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class EventServiceTest {
 
     @InjectMocks

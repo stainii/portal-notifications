@@ -7,11 +7,11 @@ import be.stijnhooft.portal.notifications.exceptions.NotificationNotFoundExcepti
 import be.stijnhooft.portal.notifications.mappers.NotificationMapper;
 import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -19,11 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class NotificationServiceTest {
 
     @InjectMocks
@@ -118,22 +117,25 @@ public class NotificationServiceTest {
         assertTrue(notification.isRead());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void markAsReadWhenFailureBecauseIdIsNull() {
-        // execute
-        notificationService.markAsRead(null, true);
+        assertThrows(NullPointerException.class, () ->
+            // execute
+            notificationService.markAsRead(null, true));
     }
 
-    @Test(expected = NotificationNotFoundException.class)
+    @Test
     public void markAsReadWhenFailureBecauseNotificationDoesNotExist() {
-        // data set
-        Long id = 2L;
+        assertThrows(NotificationNotFoundException.class, () -> {
+            // data set
+            Long id = 2L;
 
-        // mock
-        doReturn(Optional.empty()).when(notificationRepository).findById(id);
+            // mock
+            doReturn(Optional.empty()).when(notificationRepository).findById(id);
 
-        // execute
-        notificationService.markAsRead(id, true);
+            // execute
+            notificationService.markAsRead(id, true);
+        });
     }
 
     @Test

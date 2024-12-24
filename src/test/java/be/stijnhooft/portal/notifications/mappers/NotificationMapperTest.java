@@ -9,21 +9,18 @@ import be.stijnhooft.portal.notifications.entities.NotificationActionEmbeddable;
 import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionMappingToNotificationEmbeddable;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import static be.stijnhooft.portal.model.notification.PublishStrategy.PUBLISH_AT_SPECIFIC_DATE_TIME;
 import static be.stijnhooft.portal.model.notification.PublishStrategy.PUBLISH_IMMEDIATELY;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("local")
 public class NotificationMapperTest {
@@ -109,9 +106,10 @@ public class NotificationMapperTest {
         assertFalse(result.isPublished());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void mapWhenProvidingNull() {
-        notificationMapper.map(null);
+        assertThrows(NullPointerException.class, () ->
+            notificationMapper.map(null));
     }
 
     @Test
@@ -143,8 +141,9 @@ public class NotificationMapperTest {
     }
 
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void mapEntityToModelWhenProvidingNull() {
-        notificationMapper.mapEntityToModel(null);
+        assertThrows(NullPointerException.class, () ->
+            notificationMapper.mapEntityToModel(null));
     }
 }

@@ -7,10 +7,10 @@ import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionMappingToNotificationEmbeddable;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -21,10 +21,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import static be.stijnhooft.portal.model.notification.PublishStrategy.PUBLISH_WITHIN_24_HOURS;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PublishWithin24HoursPublishStrategyTest {
 
     private PublishWithin24HoursPublishStrategy strategy;
