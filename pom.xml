@@ -5,7 +5,7 @@
 
     <groupId>be.stijnhooft</groupId>
     <artifactId>portal-notifications</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>portal-notifications</name>
