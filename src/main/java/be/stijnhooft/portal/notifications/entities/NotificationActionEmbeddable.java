@@ -1,9 +1,8 @@
 package be.stijnhooft.portal.notifications.entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import lombok.*;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 
 @ToString
 @EqualsAndHashCode

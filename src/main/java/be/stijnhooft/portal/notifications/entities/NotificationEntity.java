@@ -1,9 +1,9 @@
 package be.stijnhooft.portal.notifications.entities;
 
 import be.stijnhooft.portal.model.notification.PublishStrategy;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

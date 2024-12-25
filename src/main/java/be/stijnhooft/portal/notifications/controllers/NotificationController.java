@@ -4,11 +4,11 @@ import be.stijnhooft.portal.model.notification.Notification;
 import be.stijnhooft.portal.notifications.dtos.NotificationReadStatus;
 import be.stijnhooft.portal.notifications.exceptions.NotificationNotFoundException;
 import be.stijnhooft.portal.notifications.services.NotificationService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class NotificationController {
         }
     }
 
-    @PutMapping("/{id}/read")
+    @PutMapping("/{id}/read/")
     public ResponseEntity<Notification> markAsRead(@PathVariable Long id, @RequestBody NotificationReadStatus readStatus) {
         if (id.longValue() != readStatus.getId().longValue()) {
             throw new IllegalArgumentException("The id in the url (" + id + ") is not the same as the id in the payload (" + readStatus.getId() + ")");
@@ -52,7 +52,7 @@ public class NotificationController {
      * By going to this REST method, the notification will be marked as read,
      * before redirecting the user to the actual url.
      */
-    @GetMapping("/{id}/action/url")
+    @GetMapping("/{id}/action/url/")
     public void markAsReadAndRedirectToActionUrl(@PathVariable Long id, HttpServletResponse response) throws IOException {
         try {
             Notification notification = notificationService.markAsRead(id, true);

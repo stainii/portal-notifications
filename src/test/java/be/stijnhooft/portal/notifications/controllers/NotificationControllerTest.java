@@ -15,11 +15,12 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -38,9 +39,9 @@ public class NotificationControllerTest {
     @DatabaseSetup("/datasets/NotificationControllerTest-find-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
     public void findWhenRequestingOnlyUnreadAndPublishedNotifications() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("http://localhost:2003/api/notification/")
-            .param("onlyUnread", "true")
-            .contentType(APPLICATION_JSON))
+        mvc.perform(get("/api/notification/")
+                .param("onlyUnread", "true")
+                .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(2)))
 
@@ -67,9 +68,9 @@ public class NotificationControllerTest {
     @DatabaseSetup("/datasets/NotificationControllerTest-find-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
     public void findWhenRequestingOnlyReadNotifications() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("http://localhost:2003/api/notification/")
-            .param("onlyUnread", "false")
-            .contentType(APPLICATION_JSON))
+        mvc.perform(get("/api/notification/")
+                .param("onlyUnread", "false")
+                .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
 
@@ -87,8 +88,8 @@ public class NotificationControllerTest {
     @DatabaseSetup("/datasets/NotificationControllerTest-find-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
     public void findWhenWeDoNotDefineOnlyRead() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("http://localhost:2003/api/notification/")
-            .contentType(APPLICATION_JSON))
+        mvc.perform(get("/api/notification/")
+                .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(3)))
 
@@ -125,12 +126,14 @@ public class NotificationControllerTest {
     @ExpectedDatabase(value = "/datasets/NotificationControllerTest-markAsReadWhenReadIsTrue-expected.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
     @DatabaseTearDown("/datasets/clear.xml")
     public void markAsReadWhenReadIsTrueSuccess() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("http://localhost:2003/api/notification/1/read/")
-            .content("{" +
-                "\"id\":\"1\"," +
-                "\"read\":\"true\"" +
-                "}")
-            .contentType(APPLICATION_JSON))
+        mvc.perform(put("/api/notification/1/read/")
+                .content("""
+                    {
+                        "id":"1",
+                        "read":"true"
+                    }
+                    """)
+                .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("id", is(1)))
             .andExpect(jsonPath("origin", is("Housagotchi")))
@@ -147,12 +150,12 @@ public class NotificationControllerTest {
     @ExpectedDatabase(value = "/datasets/NotificationControllerTest-markAsReadWhenReadIsFalse-expected.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
     @DatabaseTearDown("/datasets/clear.xml")
     public void markAsReadWhenReadIsFalseSuccess() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("http://localhost:2003/api/notification/1/read/")
-            .content("{" +
-                "\"id\":\"1\"," +
-                "\"read\":\"false\"" +
-                "}")
-            .contentType(APPLICATION_JSON))
+        mvc.perform(put("/api/notification/1/read/")
+                .content("{" +
+                    "\"id\":\"1\"," +
+                    "\"read\":\"false\"" +
+                    "}")
+                .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("id", is(1)))
             .andExpect(jsonPath("origin", is("Housagotchi")))
@@ -168,12 +171,12 @@ public class NotificationControllerTest {
     @DatabaseSetup("/datasets/NotificationControllerTest-markAsReadWhenReadIsFalse-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
     public void markAsReadWhenNotificationDoesNotExist() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("http://localhost:2003/api/notification/2/read/")
-            .content("{" +
-                "\"id\":\"2\"," +
-                "\"read\":\"false\"" +
-                "}")
-            .contentType(APPLICATION_JSON))
+        mvc.perform(put("/api/notification/2/read")
+                .content("{" +
+                    "\"id\":\"2\"," +
+                    "\"read\":\"false\"" +
+                    "}")
+                .contentType(APPLICATION_JSON))
             .andExpect(status().isNotFound());
     }
 
@@ -183,7 +186,7 @@ public class NotificationControllerTest {
     @ExpectedDatabase(value = "/datasets/NotificationControllerTest-markAsReadWhenReadIsTrue-expected.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
     @DatabaseTearDown("/datasets/clear.xml")
     public void markAsReadAndRedirectToActionUrlWhenSuccess() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("http://localhost:2003/api/notification/1/action/url/"))
+        mvc.perform(get("/api/notification/1/action/url/"))
             .andExpect(redirectedUrl("http://www.stijnhooft.be"));
     }
 
@@ -191,7 +194,7 @@ public class NotificationControllerTest {
     @DatabaseSetup("/datasets/NotificationControllerTest-markAsReadWhenReadIsTrue-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
     public void markAsReadAndRedirectToActionUrlWhenNotificationNotFound() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("http://localhost:2003/api/notification/2/action/url/"))
+        mvc.perform(get("/api/notification/2/action/url/"))
             .andExpect(status().isNotFound());
     }
 

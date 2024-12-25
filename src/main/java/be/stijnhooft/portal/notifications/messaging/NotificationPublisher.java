@@ -1,28 +1,24 @@
 package be.stijnhooft.portal.notifications.messaging;
 
 import be.stijnhooft.portal.model.notification.Notification;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component
-@EnableBinding(NotificationTopic.class)
 @Slf4j
+@RequiredArgsConstructor
 public class NotificationPublisher {
 
-  private final NotificationTopic notificationTopic;
+    private final StreamBridge streamBridge;
 
-  public NotificationPublisher(NotificationTopic notificationTopic) {
-    this.notificationTopic = notificationTopic;
-  }
-
-  public void publish(Collection<Notification> notifications) {
-      log.info("Sending notifications to the Notification topic");
-      log.debug(notifications.toString());
-      notificationTopic.notificationTopic().send(MessageBuilder.withPayload(notifications).build());
-  }
+    public void publish(Collection<Notification> notifications) {
+        log.info("Sending notifications to the Notification channel");
+        log.debug(notifications.toString());
+        streamBridge.send("notificationChannel-out_0", notifications);
+    }
 
 }
