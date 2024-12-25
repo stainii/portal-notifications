@@ -1,4 +1,4 @@
-FROM openjdk:11.0.1-jdk-sid
+FROM eclipse-temurin:21-alpine
 VOLUME /tmp
 EXPOSE 2003
 ARG JAR_FILE
