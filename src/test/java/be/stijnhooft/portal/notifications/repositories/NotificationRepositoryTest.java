@@ -41,7 +41,7 @@ public class NotificationRepositoryTest {
     public void findByReadAndCancelledAtIsNullAndPublishedIsTrueOrderByDateDescWhenFalse() {
         List<NotificationEntity> unreadNotifications = notificationRepository.findByReadAndCancelledAtIsNullAndPublishedIsTrueOrderByCreatedAtDesc(false);
         assertEquals(2, unreadNotifications.size());
-        assertEquals(Long.valueOf(3), unreadNotifications.get(0).getId());
+        assertEquals(Long.valueOf(3), unreadNotifications.getFirst().getId());
         assertEquals(Long.valueOf(1), unreadNotifications.get(1).getId());
     }
 
@@ -51,7 +51,7 @@ public class NotificationRepositoryTest {
     public void findByReadAndCancelledAtIsNullAndPublishedIsTrueOrderByDateDescWhenTrue() {
         List<NotificationEntity> unreadNotifications = notificationRepository.findByReadAndCancelledAtIsNullAndPublishedIsTrueOrderByCreatedAtDesc(true);
         assertEquals(1, unreadNotifications.size());
-        assertEquals(Long.valueOf(2), unreadNotifications.get(0).getId());
+        assertEquals(Long.valueOf(2), unreadNotifications.getFirst().getId());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class NotificationRepositoryTest {
     public void findAllByPublishedIsTrueAndCancelledAtIsNullOrderByDateDesc() {
         List<NotificationEntity> unreadNotifications = notificationRepository.findAllByPublishedIsTrueAndCancelledAtIsNullOrderByCreatedAtDesc();
         assertEquals(3, unreadNotifications.size());
-        assertEquals(Long.valueOf(3), unreadNotifications.get(0).getId());
+        assertEquals(Long.valueOf(3), unreadNotifications.getFirst().getId());
         assertEquals(Long.valueOf(2), unreadNotifications.get(1).getId());
         assertEquals(Long.valueOf(1), unreadNotifications.get(2).getId());
     }
@@ -75,7 +75,7 @@ public class NotificationRepositoryTest {
         List<NotificationEntity> unpublishedNotificationsThatShouldBePublished = notificationRepository.findNotificationsThatShouldBePublishedBetween(min, max);
 
         assertEquals(1, unpublishedNotificationsThatShouldBePublished.size());
-        assertEquals(Long.valueOf(2), unpublishedNotificationsThatShouldBePublished.get(0).getId());
+        assertEquals(Long.valueOf(2), unpublishedNotificationsThatShouldBePublished.getFirst().getId());
     }
 
     @Test

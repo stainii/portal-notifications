@@ -42,7 +42,7 @@ public class PublishWithin24HoursPublishStrategy implements AbstractPublishStrat
         if (notificationsThatArePlannedWithinTheNext24Hours.isEmpty()) {
             return nextTimeItIs1600();
         } else {
-            return notificationsThatArePlannedWithinTheNext24Hours.get(0).getScheduledAt();
+            return notificationsThatArePlannedWithinTheNext24Hours.getFirst().getScheduledAt();
         }
     }
 

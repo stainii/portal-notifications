@@ -36,7 +36,7 @@ public class SubscriptionRepositoryTest {
     public void findByOrigin() {
         List<SubscriptionEntity> subscriptions = subscriptionRepository.findByOrigin("test");
         assertEquals(1, subscriptions.size());
-        assertEquals(Long.valueOf(1), subscriptions.get(0).getId());
+        assertEquals(Long.valueOf(1), subscriptions.getFirst().getId());
     }
 
     @Test
