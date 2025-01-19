@@ -19,6 +19,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static be.stijnhooft.portal.model.notification.PublishStrategy.PUBLISH_WITHIN_24_HOURS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,7 +53,7 @@ public class PublishWithin24HoursPublishStrategyTest {
         strategy = new PublishWithin24HoursPublishStrategy(notificationRepository, clock);
 
         // mock
-        doReturn(Arrays.asList(otherNotification)).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(now, tomorrow);
+        doReturn(List.of(otherNotification)).when(notificationRepository).findNotificationsThatShouldBePublishedBetween(now, tomorrow);
 
         //execute
         LocalDateTime result = strategy.apply(new FiringSubscription(subscription, event));

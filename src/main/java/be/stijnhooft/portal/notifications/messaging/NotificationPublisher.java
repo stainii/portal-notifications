@@ -18,7 +18,7 @@ public class NotificationPublisher {
     public void publish(Collection<Notification> notifications) {
         log.info("Sending notifications to the Notification channel");
         log.debug(notifications.toString());
-        streamBridge.send("notificationChannel-out_0", notifications);
+        streamBridge.send("notificationChannel-out-0", notifications);
     }
 
 }

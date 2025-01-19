@@ -1,0 +1,18 @@
+spring:
+    jpa:
+        generate-ddl: 'true'
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.HSQLDialect
+        hibernate:
+            ddl-auto: create-drop
+        show-sql: 'true'
+    datasource:
+        url: jdbc:hsqldb:mem:portal-notifications-dbunit-test
+eureka:
+    client:
+        fetch-registry: 'false'
+        register-with-eureka: 'false'
+portal-notifications:
+    schedule:
+        cron: '* * * * * *'

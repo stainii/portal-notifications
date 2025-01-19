@@ -7,8 +7,10 @@ import be.stijnhooft.portal.notifications.messaging.NotificationPublisher;
 import be.stijnhooft.portal.notifications.repositories.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class PublishNotificationsTest {
 
     private PublishNotifications publishNotifications;
@@ -34,12 +37,11 @@ public class PublishNotificationsTest {
     @Mock
     private NotificationMapper notificationMapper;
 
-    private Clock clock = Clock.fixed(ZonedDateTime.of(2019, 5, 30, 12, 10, 0, 0, ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
-    private LocalDateTime now = LocalDateTime.ofInstant(clock.instant(), ZoneId.systemDefault());
+    private final Clock clock = Clock.fixed(ZonedDateTime.of(2019, 5, 30, 12, 10, 0, 0, ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+    private final LocalDateTime now = LocalDateTime.ofInstant(clock.instant(), ZoneId.systemDefault());
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.initMocks(this);
         publishNotifications = new PublishNotifications(notificationRepository, notificationPublisher, notificationMapper, clock);
     }
 

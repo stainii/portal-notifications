@@ -1,0 +1,71 @@
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health,info,prometheus
+            cors:
+                allowed-origins: '*'
+                allowed-methods: '*'
+                allowed-headers: '*'
+spring:
+    cloud:
+        stream:
+            bindings:
+                eventChannel-in-0:
+                    destination: eventTopic
+                    content-type: application/json
+                notificationChannel-out-0:
+                    destination: notificationTopic
+                    content-type: application/json
+            binders:
+                rabbit:
+                    environment:
+                        spring:
+                            rabbitmq:
+                                password: guest
+                                username: guest
+                                port: '5672'
+                                host: localhost
+                    type: rabbit
+            default:
+                contentType: application/json
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                jdbc:
+                    lob:
+                        non_contextual_creation: 'true'
+        show-sql: 'true'
+    application:
+        name: notifications
+    profiles:
+        active: '@environment@'
+    datasource:
+        password: test123
+        username: portal-notifications
+        url: jdbc:postgresql://@database-host@:@database-port@/portal-notifications
+    jmx:
+        default-domain: notifications
+server:
+    port: '2003'
+eureka:
+    instance:
+        hostname: portal-notifications-app
+        prefer-ip-address: 'false'
+    client:
+        service-url:
+            defaultZone: http://localhost:8761/eureka
+
+portal-notifications:
+    base-url: https://please_overwrite/
+    schedule:
+        cron: '0 * * * * *'
+
+logging:
+    level:
+        org:
+            springframework:
+                integration: DEBUG

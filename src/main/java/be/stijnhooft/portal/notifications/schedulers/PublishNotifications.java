@@ -22,7 +22,6 @@ import java.util.List;
 @Transactional
 public class PublishNotifications {
 
-    private static final String EVERY_MINUTE = "0   *  *   *   *  *";
     private final NotificationRepository notificationRepository;
     private final NotificationPublisher notificationPublisher;
     private final NotificationMapper notificationMapper;
@@ -38,7 +37,7 @@ public class PublishNotifications {
         this.clock = clock;
     }
 
-    @Scheduled(cron = EVERY_MINUTE) // note: Spring makes sure that, if the method has not finished its work within the minute, the next invocation of this method will NOT occur until the previous, time-consuming method has finished. Don't be scared of overlap.
+    @Scheduled(cron = "${portal-notifications.schedule.cron}")
     public void publishNotifications() {
         LocalDateTime lastPublishDate = findLastPublishDate();
 

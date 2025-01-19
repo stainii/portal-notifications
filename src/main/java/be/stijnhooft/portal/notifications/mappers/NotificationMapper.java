@@ -10,6 +10,7 @@ import be.stijnhooft.portal.notifications.entities.NotificationEntity;
 import be.stijnhooft.portal.notifications.entities.SubscriptionMappingToNotificationEmbeddable;
 import be.stijnhooft.portal.notifications.mappers.publish_strategies.AbstractPublishStrategy;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,15 +26,15 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class NotificationMapper {
 
     private final ExpressionParser parser = new SpelExpressionParser();
 
-    @Value("${baseUrl}")
-    private String baseUrlOfThisDeployment;
+    @Value("${portal-notifications.base-url}")
+    private final String baseUrlOfThisDeployment;
 
-    @Autowired
-    private List<AbstractPublishStrategy> publishStrategies;
+    private final List<AbstractPublishStrategy> publishStrategies;
 
     public NotificationEntity map(@NonNull FiringSubscription firingSubscription) {
         Event event = firingSubscription.getEvent();

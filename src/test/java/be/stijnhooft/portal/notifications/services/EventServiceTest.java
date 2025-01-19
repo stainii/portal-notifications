@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ import java.util.stream.Stream;
 
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class EventServiceTest {
 
     @InjectMocks
@@ -91,16 +92,10 @@ public class EventServiceTest {
         FiringSubscription firingSubscription1 = new FiringSubscription(new SubscriptionEntity(), event1);
         FiringSubscription firingSubscription2 = new FiringSubscription(new SubscriptionEntity(), event3);
 
-        NotificationEntity notification1 = new NotificationEntity("source1", "flow1", "1", "1", new NotificationActionEmbeddable("1", "1"), PublishStrategy.PUBLISH_AT_SPECIFIC_DATE_TIME, LocalDateTime.now(), LocalDateTime.now());
-        NotificationEntity notification2 = new NotificationEntity("source3", "flow3", "3", "3", new NotificationActionEmbeddable("3", "3"), PublishStrategy.PUBLISH_IMMEDIATELY, LocalDateTime.now(), LocalDateTime.now());
-
         //mock
         doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event1);
         doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event2);
         doReturn(Stream.empty()).when(subscriptionService).fireOnActivationCondition(event3);
-
-        doReturn(notification1).when(notificationMapper).map(firingSubscription1);
-        doReturn(notification2).when(notificationMapper).map(firingSubscription2);
 
         doReturn(Stream.of(firingSubscription1)).when(subscriptionService).fireOnCancellationCondition(event1);
         doReturn(Stream.empty()).when(subscriptionService).fireOnCancellationCondition(event2);
