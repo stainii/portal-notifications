@@ -263,8 +263,6 @@
                 <environment>production</environment>
                 <database-host>portal-notifications-db</database-host>
                 <database-port>5432</database-port>
-                <rabbitmq-host>portal-rabbitmq</rabbitmq-host>
-                <rabbitmq-port>5672</rabbitmq-port>
             </properties>
             <build>
                 <plugins>
