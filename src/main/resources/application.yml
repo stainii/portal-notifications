@@ -51,14 +51,6 @@ spring:
         default-domain: notifications
 server:
     port: '2003'
-eureka:
-    instance:
-        hostname: portal-notifications-app
-        prefer-ip-address: 'false'
-    client:
-        service-url:
-            defaultZone: http://localhost:8761/eureka
-
 portal-notifications:
     base-url: https://please_overwrite/
     schedule:
@@ -69,3 +61,6 @@ logging:
         org:
             springframework:
                 integration: DEBUG
+                security: DEBUG
+
+portal.auth.keycloak-uri: http://localhost:8080

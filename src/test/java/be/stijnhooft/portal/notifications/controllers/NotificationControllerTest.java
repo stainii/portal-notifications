@@ -5,10 +5,14 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -16,9 +20,11 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -41,6 +47,7 @@ public class NotificationControllerTest {
     public void findWhenRequestingOnlyUnreadAndPublishedNotifications() throws Exception {
         mvc.perform(get("/api/notification/")
                 .param("onlyUnread", "true")
+                .with(mockJwt())
                 .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(2)))
@@ -69,6 +76,7 @@ public class NotificationControllerTest {
     @DatabaseTearDown("/datasets/clear.xml")
     public void findWhenRequestingOnlyReadNotifications() throws Exception {
         mvc.perform(get("/api/notification/")
+                .with(mockJwt())
                 .param("onlyUnread", "false")
                 .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -89,6 +97,7 @@ public class NotificationControllerTest {
     @DatabaseTearDown("/datasets/clear.xml")
     public void findWhenWeDoNotDefineOnlyRead() throws Exception {
         mvc.perform(get("/api/notification/")
+                .with(mockJwt())
                 .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(3)))
@@ -127,6 +136,7 @@ public class NotificationControllerTest {
     @DatabaseTearDown("/datasets/clear.xml")
     public void markAsReadWhenReadIsTrueSuccess() throws Exception {
         mvc.perform(put("/api/notification/1/read/")
+                .with(mockJwt())
                 .content("""
                     {
                         "id":"1",
@@ -151,6 +161,7 @@ public class NotificationControllerTest {
     @DatabaseTearDown("/datasets/clear.xml")
     public void markAsReadWhenReadIsFalseSuccess() throws Exception {
         mvc.perform(put("/api/notification/1/read/")
+                .with(mockJwt())
                 .content("{" +
                     "\"id\":\"1\"," +
                     "\"read\":\"false\"" +
@@ -172,6 +183,7 @@ public class NotificationControllerTest {
     @DatabaseTearDown("/datasets/clear.xml")
     public void markAsReadWhenNotificationDoesNotExist() throws Exception {
         mvc.perform(put("/api/notification/2/read")
+                .with(mockJwt())
                 .content("{" +
                     "\"id\":\"2\"," +
                     "\"read\":\"false\"" +
@@ -186,7 +198,8 @@ public class NotificationControllerTest {
     @ExpectedDatabase(value = "/datasets/NotificationControllerTest-markAsReadWhenReadIsTrue-expected.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
     @DatabaseTearDown("/datasets/clear.xml")
     public void markAsReadAndRedirectToActionUrlWhenSuccess() throws Exception {
-        mvc.perform(get("/api/notification/1/action/url/"))
+        mvc.perform(get("/api/notification/1/action/url/")
+                .with(mockJwt()))
             .andExpect(redirectedUrl("http://www.stijnhooft.be"));
     }
 
@@ -194,8 +207,15 @@ public class NotificationControllerTest {
     @DatabaseSetup("/datasets/NotificationControllerTest-markAsReadWhenReadIsTrue-initial.xml")
     @DatabaseTearDown("/datasets/clear.xml")
     public void markAsReadAndRedirectToActionUrlWhenNotificationNotFound() throws Exception {
-        mvc.perform(get("/api/notification/2/action/url/"))
+        mvc.perform(get("/api/notification/2/action/url/")
+                .with(mockJwt()))
             .andExpect(status().isNotFound());
+    }
+
+    private static SecurityMockMvcRequestPostProcessors.@NotNull JwtRequestPostProcessor mockJwt() {
+        return SecurityMockMvcRequestPostProcessors.jwt()
+            .jwt(jwt -> jwt.claim(StandardClaimNames.SUB, "Tonton Pirate"))
+            .authorities(List.of(new SimpleGrantedAuthority("NICE"), new SimpleGrantedAuthority("AUTHOR")));
     }
 
 }
