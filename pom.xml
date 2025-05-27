@@ -261,11 +261,6 @@
     <profiles>
         <profile>
             <id>production</id>
-            <properties>
-                <environment>production</environment>
-                <database-host>portal-notifications-db</database-host>
-                <database-port>5432</database-port>
-            </properties>
             <build>
                 <plugins>
                     <plugin>

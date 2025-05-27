@@ -41,12 +41,10 @@ spring:
         show-sql: 'true'
     application:
         name: notifications
-    profiles:
-        active: '@environment@'
     datasource:
         password: test123
         username: portal-notifications
-        url: jdbc:postgresql://@database-host@:@database-port@/portal-notifications
+        url: jdbc:postgresql://localhost:5434/portal-notifications
     jmx:
         default-domain: notifications
 server:
