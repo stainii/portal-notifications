@@ -9,4 +9,6 @@ ENTRYPOINT exec java $JAVA_OPTS_NOTIFICATIONS -Djava.security.egd=file:/dev/./ur
     --spring.cloud.stream.binders.rabbit.environment.spring.rabbitmq.host=${RABBITMQ_HOST} \
     --spring.cloud.stream.binders.rabbit.environment.spring.rabbitmq.port=${RABBITMQ_PORT} \
     --spring.cloud.stream.binders.rabbit.environment.spring.rabbitmq.username=${RABBITMQ_USERNAME} \
-    --spring.cloud.stream.binders.rabbit.environment.spring.rabbitmq.password=${RABBITMQ_PASSWORD}
+    --spring.cloud.stream.binders.rabbit.environment.spring.rabbitmq.password=${RABBITMQ_PASSWORD} \
+    --portal.auth.keycloak-uri=${KEYCLOAK_URI}
+
